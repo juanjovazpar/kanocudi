@@ -1,0 +1,6 @@
+export enum CATEGORIES {
+  IRRELEVANT,
+  PERFORMANCE,
+  MUST_HAVE,
+  DELIGHTER,
+}
