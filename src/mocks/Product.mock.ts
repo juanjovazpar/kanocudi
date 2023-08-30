@@ -80,6 +80,10 @@ export const PRODUCTS: IProduct[] = [
       FEATURES[12],
       FEATURES[14],
       FEATURES[16],
+      FEATURES[1],
+      FEATURES[3],
+      FEATURES[15],
+      FEATURES[4],
     ],
     invitations: [
       INVITATIONS[1],

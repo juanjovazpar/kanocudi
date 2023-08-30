@@ -9,6 +9,7 @@ import Products from "./views/Products/Products";
 import Features from "./views/Features/Features";
 import Questions from "./views/Questions/Questions";
 import Invitations from "./views/Invitations/Invitations";
+import Results from "./views/Results/Results";
 
 export const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: ":product_id/invitations",
         element: <Invitations />,
+      },
+      {
+        path: ":product_id/results",
+        element: <Results />,
       },
     ],
   },
