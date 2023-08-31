@@ -1,5 +1,6 @@
 import { IFilter } from "@/interfaces/Filter.interface";
 import React from "react";
+import "./Authorized.scss";
 import { Outlet } from "react-router-dom";
 
 function Authorized() {
@@ -19,47 +20,53 @@ function Authorized() {
   ];
 
   return (
-    <section className="container">
-      <header>
-        <h1>HEADER</h1>
-      </header>
-      <main>
-        <section className="row">
-          <h2>PRODUCTS</h2>
-        </section>
-        <section className="row mb-2">
-          <div className="col-7 mb-2">
-            <div className="input-group">
-              <label className="input-group-text" htmlFor="inputGroupSelect01">
-                Options
-              </label>
+    <>
+      {/* <section className="overlay"></section> */}
+      <section className="container">
+        <header>
+          <h1>HEADER</h1>
+        </header>
+        <main>
+          <section className="row">
+            <h2>PRODUCTS</h2>
+          </section>
+          <section className="row mb-2">
+            <div className="col-7 mb-2">
+              <div className="input-group">
+                <label
+                  className="input-group-text"
+                  htmlFor="inputGroupSelect01"
+                >
+                  Options
+                </label>
 
-              <input
-                type="text"
-                className="form-control"
-                id="inputGroupSelect01"
-              />
-              <button className="btn btn-outline-secondary" type="button">
-                Button
-              </button>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="inputGroupSelect01"
+                />
+                <button className="btn btn-outline-secondary" type="button">
+                  Button
+                </button>
+              </div>
             </div>
-          </div>
-          <div className="col-7">
-            {filters.map((f) => (
-              <span
-                className="badge rounded-pill text-bg-primary me-1"
-                key={f.value}
-              >
-                {f.name}
-              </span>
-            ))}
-          </div>
-        </section>
-        <section className="row">
-          <Outlet />
-        </section>
-      </main>
-    </section>
+            <div className="col-7">
+              {filters.map((f) => (
+                <span
+                  className="badge rounded-pill text-bg-primary me-1"
+                  key={f.value}
+                >
+                  {f.name}
+                </span>
+              ))}
+            </div>
+          </section>
+          <section className="row">
+            <Outlet />
+          </section>
+        </main>
+      </section>
+    </>
   );
 }
 
