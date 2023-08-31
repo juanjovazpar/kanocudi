@@ -1,15 +1,28 @@
-import express, { Express, Request, Response } from "express";
+import express from "express";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const app: Express = express();
-const port = 8080; //process.env.PORT;
+const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server ");
-});
+mongoose
+  .connect(process.env.DB_URI!, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  } as mongoose.ConnectOptions)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB:", error);
+  });
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+app.use(express.json());
+
+// app.use("/", indexRouter);
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`⚡[server]: Server is running at http://localhost:${PORT}`);
 });
