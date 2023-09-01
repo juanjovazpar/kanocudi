@@ -1,9 +1,9 @@
 import React from "react";
 import { IProduct } from "@/interfaces/Product.interface";
-import { PRODUCTS } from "../../mocks/Product.mock";
+import { PRODUCTS } from "../../../../mocks/Product.mock";
 import { Link } from "react-router-dom";
 
-function Invitations() {
+function Products() {
   const product: IProduct = PRODUCTS[4];
 
   return (
@@ -12,20 +12,20 @@ function Invitations() {
         <div className="col-7">
           <div className="card mb-2">
             <div className="card-body">
-              <h5 className="card-title">New Invitation</h5>
+              <h5 className="card-title">New Feature</h5>
             </div>
           </div>
-          {product.invitations.map((invitation, key) => (
+          {product.features.map((feature, key) => (
             <div key={key} className="card mb-2">
               <div className="card-body">
-                <h5 className="card-title">{invitation.email}</h5>
+                <h5 className="card-title">{feature.name}</h5>
+                <p className="card-text">{feature.description}</p>
               </div>
             </div>
           ))}
         </div>
         <div className="col-5">
-          LINK TO SHARE
-          <Link to="results">
+          <Link to="questions">
             <button type="button" className="btn btn-primary">
               Next
             </button>
@@ -36,4 +36,4 @@ function Invitations() {
   );
 }
 
-export default Invitations;
+export default Products;

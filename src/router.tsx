@@ -5,11 +5,11 @@ import SignIn from "./views/Unauthorized/components/SignIn/SignIn";
 import SignUp from "./views/Unauthorized/components/SignUp/SignUp";
 import ForgotPassword from "./views/Unauthorized/components/ForgotPassword/ForgotPassword";
 import Authorized from "./views/Authorized/Authorized";
-import Products from "./views/Products/Products";
-import Features from "./views/Features/Features";
-import Questions from "./views/Questions/Questions";
-import Invitations from "./views/Invitations/Invitations";
-import Results from "./views/Results/Results";
+import Products from "./views/Authorized/components/Products/Products";
+import Features from "./views/Authorized/components/Features/Features";
+import Questions from "./views/Authorized/components/Questions/Questions";
+import Invitations from "./views/Authorized/components/Invitations/Invitations";
+import Results from "./views/Authorized/components/Results/Results";
 
 export const router = createBrowserRouter([
   {
@@ -20,11 +20,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <SignIn />,
+        element: <SignUp />,
       },
       {
-        path: "signup",
-        element: <SignUp />,
+        path: "signin",
+        element: <SignIn />,
       },
       {
         path: "forgot",

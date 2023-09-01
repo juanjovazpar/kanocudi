@@ -1,6 +1,6 @@
 import React from "react";
 import { IProduct } from "@/interfaces/Product.interface";
-import { PRODUCTS } from "../../mocks/Product.mock";
+import { PRODUCTS } from "../../../../mocks/Product.mock";
 
 function Results() {
   const product: IProduct = PRODUCTS[4];
