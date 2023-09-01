@@ -1,6 +1,6 @@
 import React from "react";
 import { IProduct } from "@/interfaces/Product.interface";
-import { PRODUCTS } from "../../mocks/Product.mock";
+import { PRODUCTS } from "../../../../mocks/Product.mock";
 import { Link } from "react-router-dom";
 
 function Questions() {

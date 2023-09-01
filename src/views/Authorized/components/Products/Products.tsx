@@ -1,7 +1,7 @@
 import React from "react";
 import { IProduct } from "@/interfaces/Product.interface";
 import Product from "./components/Product/Product";
-import { PRODUCTS } from "../../mocks/Product.mock";
+import { PRODUCTS } from "../../../../mocks/Product.mock";
 import { Link } from "react-router-dom";
 
 function Products() {
