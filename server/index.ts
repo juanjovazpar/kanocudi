@@ -1,6 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./swaggerOptions";
+import authRoutes from "./routes/auth";
 
 dotenv.config();
 
@@ -15,16 +18,16 @@ mongoose
     console.log("Connected to MongoDB");
   })
   .catch((error) => {
-    console.error("Error connecting to MongoDB:", error);
+    console.error("Error  connecting to MongoDB:", error);
   });
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use("/auth", authRoutes);
 
 app.use(express.json());
 
-app.use("/", (_, res) => {
-  res.send("Api running!");
-});
-
-const PORT = process.env.API_PORT || 3000;
+const PORT = process.env.API_PORT || 8080;
 app.listen(PORT, () => {
   console.log(`⚡[server]: Server is running at http://localhost:${PORT}`);
 });
