@@ -29,7 +29,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build": "react-scripts build && cd server && npx tsc --outDir ../build",
-    "dev": "concurrently \"cd server && npx tsc --outDir ../build/server --watch\" \"nodemon -q ./build/server/index.js\" \"npm start\""
+    "dev": "concurrently \"mongod\" \"cd server && npx tsc --outDir ../build/server --watch\" \"nodemon -q ./build/server/index.js\" \"npm start\""
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@playwright/test": "^1.37.1",
     "@types/bcryptjs": "^2.4.3",
     "@types/express": "^4.17.17",
     "@types/node": "^20.5.7",
