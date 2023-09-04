@@ -1,11 +1,14 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 
 // Define the User interface for TypeScript
 interface IUser extends Document {
   email: string; // Change to email as the identifier
   password: string;
   name: string;
+  isVerified: boolean;
+  verificationToken: string;
 }
 
 // Define the User schema
@@ -24,23 +27,32 @@ const userSchema: Schema<IUser> = new Schema({
     type: String,
     required: true,
   },
-  // You can add more fields as needed for your user data (e.g., name, etc.).
+  isVerified: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
+  verificationToken: {
+    type: String,
+    required: true,
+  },
 });
 
-// Hash the password before saving it to the database
 userSchema.pre<IUser>("save", async function (next) {
   try {
-    // Generate a salt for password hashing
     const salt = await bcrypt.genSalt(10);
-
-    // Hash the password with the salt
+    const expirationTime = Date.now() + 24 * 60 * 60 * 1000;
+    const verificationToken = `${crypto
+      .randomBytes(32)
+      .toString("hex")}.${expirationTime}`;
     const hashedPassword = await bcrypt.hash(this.password, salt);
+    const hashedVerificationToken = await bcrypt.hash(verificationToken, salt);
 
-    // Replace the plain password with the hashed password
     this.password = hashedPassword;
+    this.verificationToken = hashedVerificationToken;
 
     if (!this.name) {
-      this.name = "";
+      this.name = "Unknown";
     }
 
     next();
