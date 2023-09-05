@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IUser, User } from "../models/user";
+import { IUser, User } from "../schemas/user";
 import { sendResetPasswordLink } from "../mailer/resetPasswordLink";
 import { sendPasswordSet } from "../mailer/passwordSet";
 import { getHashedToken } from "../utils/tokenGenerator";
@@ -7,7 +7,7 @@ import { getHashedToken } from "../utils/tokenGenerator";
 export const forgot_password = async (
   req: Request,
   res: Response
-): Promise<void> => {
+): Promise<Response | void> => {
   try {
     const { email } = req.body;
     const user: IUser | null = await User.findOne({ email });
@@ -34,7 +34,7 @@ export const forgot_password = async (
 export const resetPassword = async (
   req: Request,
   res: Response
-): Promise<void> => {
+): Promise<Response | void> => {
   const { resetPasswordToken, password } = req.params;
 
   try {
@@ -54,6 +54,9 @@ export const resetPassword = async (
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Error during verification", error: error.message });
+      .json({
+        message: "Error during verification",
+        error: (error as Error).message,
+      });
   }
 };

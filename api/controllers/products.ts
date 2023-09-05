@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
-import { Product } from "../models/product";
+import { Product } from "../schemas/product";
+import { RequestAuth } from "../middlewares/authToken";
 
 export const getAllProducts = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const userId = req.user._id;
+    const userId = (req as RequestAuth).user._id;
 
     const products = await Product.find({ owner: userId })
       .populate("features")
@@ -24,7 +25,7 @@ export const createProduct = async (
   res: Response
 ): Promise<void> => {
   try {
-    const userId = req.user._id;
+    const userId = (req as RequestAuth).user._id;
     const { name, description } = req.body;
 
     const newProduct = new Product({
@@ -100,9 +101,8 @@ export const deleteProductById = async (
   res: Response
 ): Promise<void> => {
   try {
-    const productId = req.params.product_id; // Assuming you use product_id as the parameter name
+    const productId = req.params.product_id;
 
-    // Delete the product by ID (or slug)
     const deletedProduct = await Product.findByIdAndRemove(productId);
 
     if (!deletedProduct) {
@@ -110,7 +110,7 @@ export const deleteProductById = async (
       return;
     }
 
-    res.status(204).send(); // Send a "No Content" response for successful deletion
+    res.status(204).send();
   } catch (error) {
     console.error("Error deleting product:", error);
     res.status(500).json({ message: "Error deleting product" });

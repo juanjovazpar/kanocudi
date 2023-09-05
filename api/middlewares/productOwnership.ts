@@ -1,11 +1,16 @@
-import { Request, Response, NextFunction } from "express";
-import { IProduct, Product } from "../models/product";
+import { Response, NextFunction } from "express";
+import { IProduct, Product } from "../schemas/product";
+import { RequestAuth } from "./authToken";
+
+export interface RequestProduct extends RequestAuth {
+  product: IProduct;
+}
 
 export const productOwnershipMiddleware = async (
-  req: Request,
+  req: RequestProduct,
   res: Response,
   next: NextFunction
-): Promise<void> => {
+): Promise<Response | void> => {
   const productId: string | undefined = req.params.productId;
 
   if (!productId) {
@@ -23,7 +28,7 @@ export const productOwnershipMiddleware = async (
 
     const loggedInUserId: string = req.user._id.toString();
 
-    if (product.userId !== loggedInUserId) {
+    if (product.user._id.toString() !== loggedInUserId) {
       return res
         .status(403)
         .json({ message: "You do not have permission to access this product" });
@@ -35,7 +40,7 @@ export const productOwnershipMiddleware = async (
   } catch (error) {
     return res.status(500).json({
       message: "Error validating product ownership",
-      error: error.message,
+      error: (error as Error).message,
     });
   }
 };

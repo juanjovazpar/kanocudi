@@ -1,4 +1,4 @@
-import { ProductStatus } from "../models/productStatus";
+import { ProductStatus } from "../schemas/productStatus";
 
 const productStatusesData: any[] = [
   {
@@ -21,7 +21,7 @@ const productStatusesData: any[] = [
   },
 ];
 
-export async function createProductStatuses() {
+export async function createInitialProductStatuses() {
   try {
     const existingStatuses = await ProductStatus.find({
       name: { $in: productStatusesData.map((status) => status.name) },
