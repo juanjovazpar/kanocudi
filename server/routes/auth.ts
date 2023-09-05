@@ -1,5 +1,11 @@
 import express, { Router } from "express";
-import { signup, login, forgot_password } from "../controllers/auth";
+import {
+  signup,
+  signin,
+  forgot_password,
+  verifyUser,
+  resetPassword,
+} from "../controllers/auth";
 
 const router: Router = express.Router();
 
@@ -51,12 +57,12 @@ router.post("/signup", signup);
 
 /**
  * @swagger
- * /login:
+ * /signin:
  *   post:
  *     summary: Log in a user
  *     tags: [Authentication]
  *     requestBody:
- *       description: User login data
+ *       description: User signin data
  *       required: true
  *       content:
  *         application/json:
@@ -73,11 +79,11 @@ router.post("/signup", signup);
  *                 example: mysecurepassword
  *     responses:
  *       '200':
- *         description: Login successful.
+ *         description: signin successful.
  *       '401':
  *         description: Invalid username or password.
  */
-router.post("/login", login);
+router.post("/signin", signin);
 
 /**
  * @swagger
@@ -93,9 +99,75 @@ router.post("/login", login);
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               email:
  *                 type: string
- *                 description: The username of the user.
+ *                 description: The email of the user.
+ *                 example: john_doe
+ *     responses:
+ *       '200':
+ *         description: Recovery link has been sent.
+ *       '401':
+ *         description: Email not found.
+ */
+router.post("/forgot_password", forgot_password);
+
+/**
+ * @swagger
+ * /forgot_password/:resetPasswordToken:
+ *   post:
+ *     summary: Reset password
+ *     tags: [Authentication]
+ *     requestBody:
+ *       description: User reset password
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 description: The password of the user.
+ *                 example: john_doe
+ *     responses:
+ *       '200':
+ *         description: Password set succesfully.
+ *       '401':
+ *         description: User not found.
+ */
+router.post("/forgot_password/:resetPasswordToken", resetPassword);
+
+/**
+ * @swagger
+ * /verify:
+ *   get:
+ *     summary: Verify user email
+ *     tags: [Authentication]
+ *     responses:
+ *       '200':
+ *         description: Verified email.
+ *       '401':
+ *         description: Email or token not found.
+ */
+router.post("verify/:verificationToken", verifyUser); // TODO: Add authentication middleware to ensure only logged users can verify himself
+
+/**
+ * @swagger
+ * /verify/:verificationToken:
+ *   post:
+ *     summary: Verify user
+ *     tags: [Authentication]
+ *     requestBody:
+ *       description: User verify email
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *                 description: The verification token of the user.
  *                 example: john_doe
  *     responses:
  *       '200':
@@ -103,6 +175,6 @@ router.post("/login", login);
  *       '401':
  *         description: Username not found.
  */
-router.post("/forgot_password", forgot_password);
+router.post("verify/:verificationToken", verifyUser); // TODO: Add authentication middleware to ensure only logged users can verify himself
 
 export default router;

@@ -9,6 +9,7 @@ interface IUser extends Document {
   name: string;
   isVerified: boolean;
   verificationToken?: string;
+  resetPasswordToken?: string;
 }
 
 // Define the User schema
@@ -33,6 +34,9 @@ const userSchema: Schema<IUser> = new Schema({
     default: false,
   },
   verificationToken: {
+    type: String,
+  },
+  resetPasswordToken: {
     type: String,
   },
 });

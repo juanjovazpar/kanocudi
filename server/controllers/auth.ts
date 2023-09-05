@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { IUser, User } from "../models/user";
 import { sendVerificationLink } from "../mailer/verificationLink";
+import { sendResetPasswordLink } from "../mailer/resetPasswordLink";
+import { sendPasswordSet } from "../mailer/passwordSet";
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -21,7 +23,6 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       .randomBytes(32)
       .toString("hex")}.${expirationTime}`;
     const hashedVerificationToken = await bcrypt.hash(verificationToken, salt);
-    //////////////////
 
     const newUser: IUser = new User({
       email,
@@ -33,7 +34,6 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
     // Generate verification token //
     await sendVerificationLink(email, hashedVerificationToken);
-    //////////////////
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
@@ -42,7 +42,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const login = async (req: Request, res: Response): Promise<void> => {
+export const signin = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
     const user: IUser | null = await User.findOne({ email });
@@ -82,11 +82,85 @@ export const forgot_password = async (
   res: Response
 ): Promise<void> => {
   try {
-    // ... (forgot_password controller logic)
+    const { email } = req.body;
+    const user: IUser | null = await User.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: "Request failed. User not found." });
+    }
+
+    // Generate reset password token //
+    const salt = await bcrypt.genSalt(10);
+    const expirationTime = Date.now() + 60 * 60 * 1000;
+    const resetPasswordToken = `${crypto
+      .randomBytes(32)
+      .toString("hex")}.${expirationTime}`;
+    const hashedResetPasswordToken = await bcrypt.hash(
+      resetPasswordToken,
+      salt
+    );
+
+    await sendResetPasswordLink(user.email, hashedResetPasswordToken);
+
+    res.status(201).json({ message: "Reset password email sent successfully" });
   } catch (error) {
     res.status(500).json({
       message: "Error during forgot password ",
       error: (error as Error).message,
     });
+  }
+};
+
+export const resetPassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { resetPasswordToken, password } = req.params;
+
+  try {
+    const user = await User.findOne({ resetPasswordToken });
+
+    if (!user) {
+      return res.status(404).json({ message: "Invalid reset password token" });
+    }
+
+    user.resetPasswordToken = undefined;
+    user.password = password;
+    await user.save();
+
+    await sendPasswordSet(user.email);
+
+    res.json({ message: "Password reset successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error during verification", error: error.message });
+  }
+};
+
+export const verifyUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { verificationToken } = req.params;
+
+  try {
+    const user = await User.findOne({ verificationToken });
+
+    if (!user) {
+      return res.status(404).json({ message: "Invalid verification token" });
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    await user.save();
+
+    res.json({ message: "Account verified successfully" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error during verification", error: error.message });
   }
 };
