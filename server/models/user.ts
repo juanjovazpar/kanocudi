@@ -8,7 +8,7 @@ interface IUser extends Document {
   password: string;
   name: string;
   isVerified: boolean;
-  verificationToken: string;
+  verificationToken?: string;
 }
 
 // Define the User schema
@@ -34,22 +34,15 @@ const userSchema: Schema<IUser> = new Schema({
   },
   verificationToken: {
     type: String,
-    required: true,
   },
 });
 
 userSchema.pre<IUser>("save", async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
-    const expirationTime = Date.now() + 24 * 60 * 60 * 1000;
-    const verificationToken = `${crypto
-      .randomBytes(32)
-      .toString("hex")}.${expirationTime}`;
     const hashedPassword = await bcrypt.hash(this.password, salt);
-    const hashedVerificationToken = await bcrypt.hash(verificationToken, salt);
 
     this.password = hashedPassword;
-    this.verificationToken = hashedVerificationToken;
 
     if (!this.name) {
       this.name = "Unknown";

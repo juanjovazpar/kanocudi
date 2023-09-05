@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swaggerOptions";
 import authRoutes from "./routes/auth";
+import verificationRoutes from "./routes/verification";
 import { createFeatureCategories } from "./db/createFeatureCategories";
 import { createProductStatuses } from "./db/createProductStatuses";
 
@@ -23,12 +24,15 @@ mongoose
     console.error("Error  connecting to MongoDB:", error);
   });
 
+// Initialize DB with default values
 createFeatureCategories();
 createProductStatuses();
+////////
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(express.json());
 app.use("/auth", authRoutes);
+app.use("/verify", verificationRoutes);
 
 const PORT = process.env.API_PORT || 8080;
 app.listen(PORT, () => {

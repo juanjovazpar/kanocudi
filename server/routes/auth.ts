@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { signup, login, forgot_password, verify } from "../controllers/auth";
+import { signup, login, forgot_password } from "../controllers/auth";
 
 const router: Router = express.Router();
 
@@ -104,19 +104,5 @@ router.post("/login", login);
  *         description: Username not found.
  */
 router.post("/forgot_password", forgot_password);
-
-/**
- * @swagger
- * /verify:
- *   get:
- *     summary: Verify user email
- *     tags: [Authentication]
- *     responses:
- *       '200':
- *         description: Verified email.
- *       '401':
- *         description: Email or token not found.
- */
-router.post("/verify", verify);
 
 export default router;

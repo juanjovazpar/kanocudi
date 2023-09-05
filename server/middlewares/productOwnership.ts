@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { IProduct, Product } from "../models/product";
 
 export const productOwnershipMiddleware = async (
   req: Request,
