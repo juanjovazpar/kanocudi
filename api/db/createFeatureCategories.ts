@@ -1,4 +1,4 @@
-import { FeatureCategory } from "../models/featureCategory";
+import { FeatureCategory } from "../schemas/featureCategory";
 
 const featureCategoriesData: any[] = [
   {
@@ -41,7 +41,7 @@ const featureCategoriesData: any[] = [
   },
 ];
 
-export async function createFeatureCategories() {
+export async function createInitialFeatureCategories() {
   try {
     const existingCategories = await FeatureCategory.find({
       name: { $in: featureCategoriesData.map((category) => category.name) },

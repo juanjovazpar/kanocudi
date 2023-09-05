@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema, Model } from "mongoose";
+import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
 import { IFeatureCategory } from "./featureCategory";
 import { getKanoQuestion } from "../utils/questionGenerator";
 
@@ -59,7 +59,7 @@ featureSchema.pre<IFeature>("save", async function (next) {
 
     next();
   } catch (error) {
-    next(error);
+    next(error as CallbackError);
   }
 });
 

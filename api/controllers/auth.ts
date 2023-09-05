@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { IUser, User } from "../models/user";
+import { IUser, User } from "../schemas/user";
 import { sendVerificationLink } from "../mailer/verificationLink";
 import { getHashedToken } from "../utils/tokenGenerator";
 
-export const signup = async (req: Request, res: Response): Promise<void> => {
+export const signup = async (
+  req: Request,
+  res: Response
+): Promise<Response | void> => {
   try {
     const { email, password } = req.body;
     const existingUser: IUser | null = await User.findOne({ email });
@@ -31,7 +34,10 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const signin = async (req: Request, res: Response): Promise<void> => {
+export const signin = async (
+  req: Request,
+  res: Response
+): Promise<Response | void> => {
   try {
     const { email, password } = req.body;
     const user: IUser | null = await User.findOne({ email });
@@ -52,10 +58,10 @@ export const signin = async (req: Request, res: Response): Promise<void> => {
         .status(401)
         .json({ message: "Authentication failed. Incorrect password." });
     }
-
+    const jwtSecret = process.env.JWT_SECRET || "default-secret";
     const token: string = jwt.sign(
       { userId: user._id, email: user.email },
-      process.env.JWT_SECRET,
+      jwtSecret,
       { expiresIn: "1h" }
     );
 

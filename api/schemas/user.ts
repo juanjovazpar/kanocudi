@@ -1,10 +1,8 @@
-import mongoose, { Document, Schema, Model } from "mongoose";
+import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
 import bcrypt from "bcryptjs";
-import crypto from "crypto";
 
-// Define the User interface for TypeScript
 interface IUser extends Document {
-  email: string; // Change to email as the identifier
+  email: string;
   password: string;
   name: string;
   isVerified: boolean;
@@ -12,11 +10,10 @@ interface IUser extends Document {
   resetPasswordToken?: string;
 }
 
-// Define the User schema
 const userSchema: Schema<IUser> = new Schema({
   email: {
     type: String,
-    unique: true, // Ensure uniqueness for email
+    unique: true,
     required: true,
     trim: true,
   },
@@ -54,11 +51,10 @@ userSchema.pre<IUser>("save", async function (next) {
 
     next();
   } catch (error) {
-    next(error);
+    next(error as CallbackError);
   }
 });
 
-// Create a User model from the schema
 const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
 
 export { User, IUser };

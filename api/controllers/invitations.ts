@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Product } from "../models/product";
+import { Product } from "../schemas/product";
 
 export const createInvitationInProduct = async (
   req: Request,
@@ -7,7 +7,7 @@ export const createInvitationInProduct = async (
 ): Promise<void> => {
   try {
     const productId = req.params.product_id;
-    const { email } = req.body;
+    // const { email } = req.body;
 
     const product = await Product.findById(productId);
 
@@ -16,7 +16,8 @@ export const createInvitationInProduct = async (
       return;
     }
 
-    product.invitations.push({ email });
+    // TODO: Add email to invitations
+    // product.invitations.push({ email });
     await product.save();
 
     res.status(201).json(product);
@@ -32,8 +33,8 @@ export const updateInvitationInProduct = async (
 ): Promise<void> => {
   try {
     const productId = req.params.product_id;
-    const invitationId = req.params.invitation_id;
-    const { email } = req.body;
+    // const invitationId = req.params.invitation_id;
+    // const { email } = req.body;
 
     const product = await Product.findById(productId);
 
@@ -42,14 +43,15 @@ export const updateInvitationInProduct = async (
       return;
     }
 
-    const invitation = product.invitations.id(invitationId);
+    // TODO: Update invitation in product
+    // const invitation = product.invitations.id(invitationId);
 
-    if (!invitation) {
-      res.status(404).json({ message: "Invitation not found" });
-      return;
-    }
+    //if (!invitation) {
+    //  res.status(404).json({ message: "Invitation not found" });
+    //  return;
+    //}
 
-    invitation.email = email;
+    // invitation.email = email;
     await product.save();
 
     res.status(200).json(product);
@@ -65,7 +67,7 @@ export const deleteInvitationFromProduct = async (
 ): Promise<void> => {
   try {
     const productId = req.params.product_id;
-    const invitationId = req.params.invitation_id;
+    // const invitationId = req.params.invitation_id;
 
     const product = await Product.findById(productId);
 
@@ -74,7 +76,8 @@ export const deleteInvitationFromProduct = async (
       return;
     }
 
-    product.invitations.pull(invitationId);
+    // TODO: Remove invitation
+    // product.invitations.pull(invitationId);
     await product.save();
 
     res.status(200).json(product);
