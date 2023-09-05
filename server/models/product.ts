@@ -5,7 +5,8 @@ interface IProduct extends Document {
   name: string;
   status: IProductStatus["_id"];
   user_id: mongoose.Types.ObjectId;
-  features?: mongoose.Types.ObjectId[];
+  features: mongoose.Types.ObjectId[];
+  invitations: mongoose.Types.ObjectId[];
   description?: string;
 }
 
@@ -25,6 +26,14 @@ const productSchema: Schema<IProduct> = new Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Feature",
+      default: [],
+    },
+  ],
+  invitations: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Feature",
+      default: [],
     },
   ],
   description: String,
