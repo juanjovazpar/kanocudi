@@ -1,11 +1,7 @@
 import express, { Router } from "express";
-import {
-  signup,
-  signin,
-  forgot_password,
-  verifyUser,
-  resetPassword,
-} from "../controllers/auth";
+import { signup, signin } from "../controllers/auth";
+import { forgot_password, resetPassword } from "../controllers/forgotPassword";
+import { verifyUser } from "../controllers/verification";
 
 const router: Router = express.Router();
 
@@ -148,32 +144,6 @@ router.post("/forgot_password/:resetPasswordToken", resetPassword);
  *         description: Verified email.
  *       '401':
  *         description: Email or token not found.
- */
-router.post("verify/:verificationToken", verifyUser); // TODO: Add authentication middleware to ensure only logged users can verify himself
-
-/**
- * @swagger
- * /verify/:verificationToken:
- *   post:
- *     summary: Verify user
- *     tags: [Authentication]
- *     requestBody:
- *       description: User verify email
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               token:
- *                 type: string
- *                 description: The verification token of the user.
- *                 example: john_doe
- *     responses:
- *       '200':
- *         description: Recovery link has been sent.
- *       '401':
- *         description: Username not found.
  */
 router.post("verify/:verificationToken", verifyUser); // TODO: Add authentication middleware to ensure only logged users can verify himself
 
