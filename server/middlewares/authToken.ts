@@ -29,10 +29,6 @@ export const authTokenMiddleware = async (
           return res.status(401).json({ message: "User not found" });
         }
 
-        if (!user.isVerified) {
-          return res.status(401).json({ message: "User is not verified" });
-        }
-
         req.user = user;
 
         next();

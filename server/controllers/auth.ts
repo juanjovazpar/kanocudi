@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import { IUser, User } from "../models/user";
+import { sendVerificationLink } from "../mailer/verificationLink";
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -12,13 +14,26 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       return res.status(400).json({ message: "Username already exists" });
     }
 
-    const hashedPassword: string = await bcrypt.hash(password, 10);
+    // Generate verification token //
+    const salt = await bcrypt.genSalt(10);
+    const expirationTime = Date.now() + 24 * 60 * 60 * 1000;
+    const verificationToken = `${crypto
+      .randomBytes(32)
+      .toString("hex")}.${expirationTime}`;
+    const hashedVerificationToken = await bcrypt.hash(verificationToken, salt);
+    //////////////////
+
     const newUser: IUser = new User({
       email,
-      password: hashedPassword,
+      password,
+      verificationToken: hashedVerificationToken,
     });
 
     await newUser.save();
+
+    // Generate verification token //
+    await sendVerificationLink(email, hashedVerificationToken);
+    //////////////////
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
@@ -38,30 +53,25 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         .json({ message: "Authentication failed. User not found." });
     }
 
-    // Compare the provided password with the hashed password in the database
     const passwordMatch: boolean = await bcrypt.compare(
       password,
       user.password
     );
 
-    // If passwords don't match, return an error
     if (!passwordMatch) {
       return res
         .status(401)
         .json({ message: "Authentication failed. Incorrect password." });
     }
 
-    // If authentication is successful, generate a JSON Web Token (JWT)
     const token: string = jwt.sign(
       { userId: user._id, name: user.name },
-      process.env.JWT_SECRET, // Replace with your JWT secret
-      { expiresIn: "1h" } // Token expiration time (adjust as needed)
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
     );
 
-    // Return the token as a response
     res.status(200).json({ token, userId: user._id, name: user.name });
   } catch (error) {
-    // Handle any unexpected errors
     console.error("Error during login:", error);
     res.status(500).json({ message: "Error during login" });
   }
@@ -78,33 +88,5 @@ export const forgot_password = async (
       message: "Error during forgot password ",
       error: (error as Error).message,
     });
-  }
-};
-
-export const verify = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const verificationToken = req.query.token;
-    const [token, expirationTime] = verificationToken.split(".");
-
-    if (expirationTime && Date.now() > parseInt(expirationTime, 10)) {
-      return res.status(401).json({ error: "Verification token has expired" });
-    }
-
-    const user = await User.findOne({ verificationToken });
-    if (!user) {
-      return res.status(401).json({ error: "Invalid verification token" });
-    }
-
-    user.isVerified = true;
-    await user.save();
-
-    user.verificationToken = undefined;
-    await user.save();
-
-    res.status(200).json({ message: "Email verification successful" });
-  } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Verification failed", details: error.message });
   }
 };
