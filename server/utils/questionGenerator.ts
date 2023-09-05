@@ -1,4 +1,4 @@
-export const generateKanoQuestion = (
+export const getKanoQuestion = (
   featureName: string,
   isPositive: boolean = true
 ): string => {

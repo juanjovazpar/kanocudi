@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 import { IFeatureCategory } from "./featureCategory";
-import { generateKanoQuestion } from "../utils/questionGenerator";
+import { getKanoQuestion } from "../utils/questionGenerator";
 
 interface IFeature extends Document {
   name: string;
@@ -50,11 +50,11 @@ featureSchema.index({ name: 1, product_id: 1 }, { unique: true });
 featureSchema.pre<IFeature>("save", async function (next) {
   try {
     if (this.positive_question) {
-      this.positive_question = generateKanoQuestion(this.name);
+      this.positive_question = getKanoQuestion(this.name);
     }
 
     if (this.negative_question) {
-      this.negative_question = generateKanoQuestion(this.name, false);
+      this.negative_question = getKanoQuestion(this.name, false);
     }
 
     next();
