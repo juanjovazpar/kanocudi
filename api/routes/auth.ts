@@ -14,18 +14,11 @@ const router: Router = express.Router();
 
 /**
  * @swagger
- * /signup:
+ * /auth/signup:
  *   post:
  *     summary: User Sign-Up
  *     description: Register a new user with a username and password.
- *     tags:
- *       - Authentication
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         type: integer
- *         description: The ID of the example to retrieve.
+ *     tags: [Authentication]
  *     requestBody:
  *       description: User signup data.
  *       required: true
@@ -34,26 +27,27 @@ const router: Router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               email:
  *                 type: string
- *                 description: The desired username for the new user.
+ *                 format: email
+ *                 description: The email for the new user.
  *               password:
  *                 type: string
  *                 format: password
  *                 description: The password for the new user.
  *     responses:
  *       '201':
- *         description: User registration successful.
+ *         description: User created successfully.
  *       '400':
- *         description: Username already exists or validation error.
+ *         description: Email already exists.
  *       '500':
- *         description: Error during user registration.
+ *         description: Error creating user.
  */
 router.post("/signup", signup);
 
 /**
  * @swagger
- * /signin:
+ * /auth/signin:
  *   post:
  *     summary: Log in a user
  *     tags: [Authentication]
@@ -65,25 +59,25 @@ router.post("/signup", signup);
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               email:
  *                 type: string
- *                 description: The username of the user.
- *                 example: john_doe
+ *                 format: email
+ *                 description: User email.
  *               password:
  *                 type: string
- *                 description: The user's password.
- *                 example: mysecurepassword
+ *                 format: password
+ *                 description: User password.
  *     responses:
  *       '200':
- *         description: signin successful.
+ *         description: Signin successful.
  *       '401':
- *         description: Invalid username or password.
+ *         description: Authentication failed. User not found | Incorrect password.
  */
 router.post("/signin", signin);
 
 /**
  * @swagger
- * /forgot_password:
+ * /auth/forgot_password:
  *   post:
  *     summary: Forgot password
  *     tags: [Authentication]
@@ -97,22 +91,29 @@ router.post("/signin", signin);
  *             properties:
  *               email:
  *                 type: string
- *                 description: The email of the user.
- *                 example: john_doe
+ *                 format: email
+ *                 description: User email.
  *     responses:
  *       '200':
- *         description: Recovery link has been sent.
+ *         description: Reset password email sent successfully.
+ *       '400':
+ *         description: Invalid email format
  *       '401':
- *         description: Email not found.
+ *         description: Request failed. User not found | Email not found.
  */
 router.post("/forgot_password", forgot_password);
 
 /**
  * @swagger
- * /forgot_password/:resetPasswordToken:
+ * /auth/forgot_password/{resetPasswordToken}:
  *   post:
  *     summary: Reset password
  *     tags: [Authentication]
+ *     parameters:
+ *     - name: resetPasswordToken
+ *       in: path
+ *       description: Token to reset Password
+ *       required: true
  *     requestBody:
  *       description: User reset password
  *       required: true
@@ -123,28 +124,36 @@ router.post("/forgot_password", forgot_password);
  *             properties:
  *               password:
  *                 type: string
- *                 description: The password of the user.
- *                 example: john_doe
+ *                 format: password
+ *                 description: New password for the user.
+ *
  *     responses:
  *       '200':
  *         description: Password set succesfully.
- *       '401':
- *         description: User not found.
+ *       '404':
+ *         description: Invalid reset password token
+ *       '400':
+ *         description: Invalid password format.
  */
 router.post("/forgot_password/:resetPasswordToken", resetPassword);
 
 /**
  * @swagger
- * /verify:
+ * /auth/verify/{verificationToken}:
  *   get:
  *     summary: Verify user email
  *     tags: [Authentication]
+ *     parameters:
+ *     - name: verificationToken
+ *       in: path
+ *       description: Token to verify user
+ *       required: true
  *     responses:
  *       '200':
  *         description: Verified email.
- *       '401':
+ *       '404':
  *         description: Email or token not found.
  */
-router.post("verify/:verificationToken", verifyUser); // TODO: Add authentication middleware to ensure only logged users can verify himself
+router.get("/verify/:verificationToken", verifyUser); // TODO: Add authentication middleware to ensure only logged users can verify himself
 
 export default router;

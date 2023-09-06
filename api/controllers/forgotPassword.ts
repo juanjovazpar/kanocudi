@@ -3,6 +3,8 @@ import { IUser, User } from "../schemas/user";
 import { sendResetPasswordLink } from "../mailer/resetPasswordLink";
 import { sendPasswordSet } from "../mailer/passwordSet";
 import { getHashedToken } from "../utils/tokenGenerator";
+import { isValidEmail } from "../utils/isValidEmail";
+import { PASSWORD_RULES, isValidPassword } from "../utils/isValidPasword";
 
 export const forgot_password = async (
   req: Request,
@@ -10,6 +12,11 @@ export const forgot_password = async (
 ): Promise<Response | void> => {
   try {
     const { email } = req.body;
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
     const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
@@ -20,13 +27,15 @@ export const forgot_password = async (
 
     const hashedResetPasswordToken = await getHashedToken(60 * 60 * 1000);
 
+    user.resetPasswordToken = hashedResetPasswordToken;
+    await user.save();
     await sendResetPasswordLink(user.email, hashedResetPasswordToken);
 
     res.status(201).json({ message: "Reset password email sent successfully" });
   } catch (error) {
     res.status(500).json({
-      message: "Error during forgot password ",
-      error: (error as Error).message,
+      message: "Error during forgot password",
+      error,
     });
   }
 };
@@ -35,13 +44,20 @@ export const resetPassword = async (
   req: Request,
   res: Response
 ): Promise<Response | void> => {
-  const { resetPasswordToken, password } = req.params;
+  const { resetPasswordToken } = req.params;
+  const { password } = req.body;
 
   try {
     const user = await User.findOne({ resetPasswordToken });
 
     if (!user) {
-      return res.status(404).json({ message: "Invalid reset password token" });
+      return res.status(401).json({ message: "Invalid reset password token" });
+    }
+
+    if (!password || !isValidPassword(password)) {
+      return res
+        .status(400)
+        .json({ message: `Invalid password format. ${PASSWORD_RULES}` });
     }
 
     user.resetPasswordToken = undefined;
@@ -52,11 +68,9 @@ export const resetPassword = async (
 
     res.json({ message: "Password reset successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Error during verification",
-        error: (error as Error).message,
-      });
+    res.status(500).json({
+      message: "Error reseting password",
+      error,
+    });
   }
 };

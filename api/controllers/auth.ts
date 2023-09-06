@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import { IUser, User } from "../schemas/user";
 import { sendVerificationLink } from "../mailer/verificationLink";
 import { getHashedToken } from "../utils/tokenGenerator";
+import { isValidEmail } from "../utils/isValidEmail";
+import { PASSWORD_RULES, isValidPassword } from "../utils/isValidPasword";
 
 export const signup = async (
   req: Request,
@@ -14,7 +16,17 @@ export const signup = async (
     const existingUser: IUser | null = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ message: "Username already exists" });
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    if (!isValidPassword(password)) {
+      return res
+        .status(400)
+        .json({ message: `Invalid password format. ${PASSWORD_RULES}` });
     }
 
     const hashedVerificationToken = await getHashedToken();
@@ -30,7 +42,7 @@ export const signup = async (
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(500).json({ message: "Error creating user" });
+    res.status(500).json({ message: "Error creating user", error });
   }
 };
 
@@ -68,6 +80,6 @@ export const signin = async (
     res.status(200).json({ token, userId: user._id, email: user.email });
   } catch (error) {
     console.error("Error during login:", error);
-    res.status(500).json({ message: "Error during login" });
+    res.status(500).json({ message: "Error during login", error });
   }
 };

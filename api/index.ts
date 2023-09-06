@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
@@ -8,6 +8,7 @@ import swaggerSpec from "./utils/swaggerDoc";
 import authRoutes from "./routes/auth";
 import productsRoutes from "./routes/products";
 import healthCheckRoutes from "./routes/healthCheck";
+import { authTokenMiddleware } from "./middlewares/authToken";
 
 dotenv.config();
 
@@ -30,15 +31,14 @@ mongoose
 
 app.use(express.json());
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 /* app.get("/docs.json", (_: Request, res: Response) => {
   res.setHeader("Content-Type", "application/json");
   res.send(swaggerSpec);
 }); */
-
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/healthcheck", healthCheckRoutes);
 app.use("/auth", authRoutes);
-app.use("/products", productsRoutes);
+app.use("/products", authTokenMiddleware, productsRoutes);
 
 const PORT = process.env.API_PORT || 8080;
 app.listen(PORT, () => {

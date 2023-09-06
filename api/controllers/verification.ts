@@ -11,7 +11,7 @@ export const verifyUser = async (
     const user = await User.findOne({ verificationToken });
 
     if (!user) {
-      return res.status(404).json({ message: "Invalid verification token" });
+      return res.status(401).json({ message: "Invalid verification token" });
     }
 
     user.isVerified = true;
@@ -22,7 +22,7 @@ export const verifyUser = async (
   } catch (error) {
     res.status(500).json({
       message: "Error during verification",
-      error: (error as Error).message,
+      error,
     });
   }
 };
