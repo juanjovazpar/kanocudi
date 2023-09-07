@@ -11,36 +11,42 @@ export const productOwnershipMiddleware = async (
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  const productId: string | undefined = req.params.productId;
-
-  if (!productId) {
-    return res
-      .status(400)
-      .json({ message: "Product ID is missing in the URL" });
-  }
-
   try {
-    const product: IProduct | null = await Product.findById(productId);
+    const productId: string | undefined = req.params.productId;
 
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    const loggedInUserId: string = req.user._id.toString();
-
-    if (product.user._id.toString() !== loggedInUserId) {
+    if (!productId) {
       return res
-        .status(403)
-        .json({ message: "You do not have permission to access this product" });
+        .status(400)
+        .json({ message: "Product ID is missing in the URL" });
     }
 
-    req.product = product;
+    try {
+      const product: IProduct | null = await Product.findById(productId);
 
-    next();
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+
+      const loggedInUserId: string = req.user._id.toString();
+
+      if (product.owner._id.toString() !== loggedInUserId) {
+        return res.status(403).json({
+          message: "You do not have permission to access this product",
+        });
+      }
+
+      req.product = product;
+
+      next();
+    } catch (error) {
+      return res.status(500).json({
+        message: "Error validating product ownership",
+        error: (error as Error).message,
+      });
+    }
   } catch (error) {
-    return res.status(500).json({
-      message: "Error validating product ownership",
-      error: (error as Error).message,
-    });
+    res
+      .status(500)
+      .json({ message: "Error in ProductOwnershipMiddleware", error });
   }
 };

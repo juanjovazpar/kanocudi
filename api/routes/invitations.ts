@@ -29,6 +29,8 @@ const router = express.Router();
  *     description: Retrieve a list of all products owned by the user.
  *     tags:
  *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       '200':
  *         description: A list of products.
@@ -45,6 +47,8 @@ router.get("/", getAllProducts);
  *     description: Create a new product with a name and description.
  *     tags:
  *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       description: Product data.
  *       required: true
@@ -75,6 +79,8 @@ router.post("/", createProduct);
  *     description: Retrieve a product by its ID.
  *     tags:
  *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: product_id
@@ -99,6 +105,8 @@ router.get("/:product_id", getProductById);
  *     description: Update a product's name and description by its ID.
  *     tags:
  *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: product_id
@@ -137,6 +145,8 @@ router.put("/:product_id", updateProductById);
  *     description: Delete a product by its ID.
  *     tags:
  *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: product_id
@@ -161,6 +171,8 @@ router.delete("/:product_id", deleteProductById);
  *     description: Create an invitation for a product with a specified email.
  *     tags:
  *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: product_id
@@ -196,6 +208,8 @@ router.post("/:product_id/invitations", createInvitationInProduct);
  *     description: Update the email of an invitation for a product.
  *     tags:
  *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: product_id
@@ -235,10 +249,12 @@ router.put(
  * @swagger
  * /products/{product_id}/invitations/{invitation_id}:
  *   delete:
- *     summary: Delete an invitation from a product
- *     description: Delete an invitation from a product by its ID.
+ *     summary: Delete an invitation for a product
+ *     description: Delete an invitation for a product by its ID.
  *     tags:
  *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: product_id
