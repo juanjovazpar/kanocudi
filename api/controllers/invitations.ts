@@ -22,7 +22,6 @@ export const createInvitationInProduct = async (
 
     res.status(201).json(product);
   } catch (error) {
-    console.error("Error creating invitation:", error);
     res.status(500).json({ message: "Error creating invitation" });
   }
 };
@@ -56,7 +55,6 @@ export const updateInvitationInProduct = async (
 
     res.status(200).json(product);
   } catch (error) {
-    console.error("Error updating invitation:", error);
     res.status(500).json({ message: "Error updating invitation" });
   }
 };
@@ -82,7 +80,6 @@ export const deleteInvitationFromProduct = async (
 
     res.status(200).json(product);
   } catch (error) {
-    console.error("Error deleting invitation:", error);
     res.status(500).json({ message: "Error deleting invitation" });
   }
 };

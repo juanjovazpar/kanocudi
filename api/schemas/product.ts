@@ -1,10 +1,11 @@
 import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
-import { IProductStatus, ProductStatus } from "./productStatus"; // Import the ProductStatus interface
+import { ProductStatus } from "./productStatus"; // Import the ProductStatus interface
+import { DRAFT_STATUS } from "../db/createProductStatuses";
 
 interface IProduct extends Document {
   name: string;
-  status: IProductStatus["_id"];
-  user: mongoose.Types.ObjectId;
+  status: mongoose.Types.ObjectId;
+  owner: mongoose.Types.ObjectId;
   features: mongoose.Types.ObjectId[];
   invitations: mongoose.Types.ObjectId[];
   description?: string;
@@ -15,9 +16,8 @@ const productSchema: Schema<IProduct> = new Schema({
   status: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "ProductStatus",
-    required: true,
   },
-  user: {
+  owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -41,17 +41,15 @@ const productSchema: Schema<IProduct> = new Schema({
 
 productSchema.pre<IProduct>("save", async function (next) {
   try {
-    const statusName = this.status;
+    const statusId = this.status;
 
-    let existingStatus = await ProductStatus.findOne({
-      name: statusName,
-    }).exec();
+    let existingStatus = await ProductStatus.findById(statusId);
 
     if (!existingStatus) {
-      existingStatus = await ProductStatus.create({ name: statusName });
+      existingStatus = await ProductStatus.findOne({ name: DRAFT_STATUS });
     }
 
-    this.status = existingStatus._id;
+    this.status = existingStatus?._id;
 
     next();
   } catch (error) {

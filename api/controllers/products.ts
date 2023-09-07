@@ -9,14 +9,15 @@ export const getAllProducts = async (
   try {
     const userId = (req as RequestAuth).user._id;
 
-    const products = await Product.find({ owner: userId })
+    const products = await Product.find({ owner: userId });
+    /* TODO: Populate features and invitations:
       .populate("features")
       .populate("invitations");
+    */
 
     res.status(200).json(products);
   } catch (error) {
-    console.error("Error retrieving products:", error);
-    res.status(500).json({ message: "Error retrieving products" });
+    res.status(500).json({ message: "Error retrieving products", error });
   }
 };
 
@@ -40,7 +41,6 @@ export const createProduct = async (
 
     res.status(201).json(newProduct);
   } catch (error) {
-    console.error("Error creating product:", error);
     res.status(500).json({ message: "Error creating product", error });
   }
 };
@@ -52,9 +52,11 @@ export const getProductById = async (
   try {
     const productId = req.params.product_id;
 
-    const product = await Product.findById(productId)
+    const product = await Product.findById(productId);
+    /* TODO: Populate features and invitations:
       .populate("features")
       .populate("invitations");
+    */
 
     if (!product) {
       res.status(404).json({ message: "Product not found" });
@@ -63,7 +65,6 @@ export const getProductById = async (
 
     res.status(200).json(product);
   } catch (error) {
-    console.error("Error retrieving product:", error);
     res.status(500).json({ message: "Error retrieving product", error });
   }
 };
@@ -80,9 +81,11 @@ export const updateProductById = async (
       productId,
       { name, description },
       { new: true }
-    )
+    );
+    /* TODO: Populate features and invitations:
       .populate("features")
       .populate("invitations");
+    */
 
     if (!updatedProduct) {
       res.status(404).json({ message: "Product not found" });
@@ -91,7 +94,6 @@ export const updateProductById = async (
 
     res.status(200).json(updatedProduct);
   } catch (error) {
-    console.error("Error updating product:", error);
     res.status(500).json({ message: "Error updating product", error });
   }
 };
@@ -112,7 +114,6 @@ export const deleteProductById = async (
 
     res.status(204).send();
   } catch (error) {
-    console.error("Error deleting product:", error);
     res.status(500).json({ message: "Error deleting product", error });
   }
 };

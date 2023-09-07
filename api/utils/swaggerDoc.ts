@@ -10,9 +10,12 @@ const options: swaggerJsdoc.Options = {
       description: `API documentation for ${name}`,
     },
     components: {
-      securitySchemas: {
+      securitySchemes: {
         bearerAuth: {
-          type: "http",
+          type: "apiKey",
+          in: "header",
+          name: "Authorization",
+          description: "Enter the authentication token.",
           scheme: "bearer",
           bearerFormat: "JWT",
         },

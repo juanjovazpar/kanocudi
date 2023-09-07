@@ -16,7 +16,7 @@ const router: Router = express.Router();
  * @swagger
  * /auth/signup:
  *   post:
- *     summary: User Sign-Up
+ *     summary: User sign-up
  *     description: Register a new user with a username and password.
  *     tags: [Authentication]
  *     requestBody:
