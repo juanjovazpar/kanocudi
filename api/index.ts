@@ -1,4 +1,5 @@
 import express from "express";
+import morgan from "morgan";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
@@ -30,12 +31,17 @@ mongoose
   });
 
 app.use(express.json());
+// Add logs
+app.use(morgan(process.env.MORGAN_MODE || "dev")); // "dev" | "combined" | "common"
 
+// Create API documentation
 /* app.get("/docs.json", (_: Request, res: Response) => {
   res.setHeader("Content-Type", "application/json");
   res.send(swaggerSpec);
 }); */
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// API routes
 app.use("/healthcheck", healthCheckRoutes);
 app.use("/auth", authRoutes);
 app.use("/products", authTokenMiddleware, productsRoutes);

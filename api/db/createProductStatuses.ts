@@ -2,20 +2,20 @@ import { ProductStatus } from "../schemas/productStatus";
 
 const productStatusesData: any[] = [
   {
-    name: "Draft",
+    name: "draft",
     description: "The product doesn't fulfill the requirements to be sent yet.",
   },
   {
-    name: "Ready",
+    name: "ready",
     description:
       "The product is ready to be sent but it is not being sent yet (it has between 6 and 30 features).",
   },
   {
-    name: "Sent",
+    name: "sent",
     description: "The product is being sent to some visitors.",
   },
   {
-    name: "Complete",
+    name: "complete",
     description:
       "The product has been responded to at least 10 times and is considered complete.",
   },

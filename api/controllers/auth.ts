@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { IUser, User } from "../schemas/user";
-import { sendVerificationLink } from "../mailer/verificationLink";
-import { getHashedToken } from "../utils/tokenGenerator";
+import { sendVerificationMail } from "../mailer/verificationLink";
+import { getHashedToken, getJWToken } from "../utils/tokenGenerator";
 import { isValidEmail } from "../utils/isValidEmail";
-import { PASSWORD_RULES, isValidPassword } from "../utils/isValidPasword";
+import {
+  PASSWORD_RULES,
+  comparePasswords,
+  isValidPassword,
+} from "../utils/passwords";
 
 export const signup = async (
   req: Request,
@@ -37,7 +39,7 @@ export const signup = async (
     });
 
     await newUser.save();
-    await sendVerificationLink(email, hashedVerificationToken);
+    await sendVerificationMail(email, hashedVerificationToken);
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
@@ -60,7 +62,7 @@ export const signin = async (
         .json({ message: "Authentication failed. User not found." });
     }
 
-    const passwordMatch: boolean = await bcrypt.compare(
+    const passwordMatch: boolean = await comparePasswords(
       password,
       user.password
     );
@@ -70,12 +72,7 @@ export const signin = async (
         .status(401)
         .json({ message: "Authentication failed. Incorrect password." });
     }
-    const jwtSecret = process.env.JWT_SECRET || "default-secret";
-    const token: string = jwt.sign(
-      { userId: user._id, email: user.email },
-      jwtSecret,
-      { expiresIn: "1h" }
-    );
+    const token: string = getJWToken(user._id, user.email);
 
     res.status(200).json({ token, userId: user._id, email: user.email });
   } catch (error) {

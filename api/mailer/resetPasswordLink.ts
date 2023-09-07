@@ -3,7 +3,7 @@ import transporter from "./transporter";
 
 dotenv.config();
 
-export const sendResetPasswordLink = async (
+export const sendResetPasswordMail = async (
   recipient: string,
   resetPasswordToken: string
 ): Promise<void> => {

@@ -3,7 +3,7 @@ import transporter from "./transporter";
 
 dotenv.config();
 
-export const sendVerificationLink = async (
+export const sendVerificationMail = async (
   recipient: string,
   verificationToken: string
 ): Promise<void> => {

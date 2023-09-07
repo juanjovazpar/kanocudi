@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
-import bcrypt from "bcryptjs";
+import { hashPassword } from "../utils/passwords";
 
 interface IUser extends Document {
   email: string;
@@ -39,10 +39,7 @@ const userSchema: Schema<IUser> = new Schema({
 
 userSchema.pre<IUser>("save", async function (next) {
   try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(this.password, salt);
-
-    this.password = hashedPassword;
+    this.password = await hashPassword(this.password);
 
     if (!this.name) {
       this.name = "Unknown";
