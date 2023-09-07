@@ -1,3 +1,5 @@
+import bcrypt from "bcryptjs";
+
 const MIN_LENGTH = 12;
 const MAX_LENGTH = 50;
 
@@ -13,4 +15,16 @@ export const isValidPassword = (password: string): boolean => {
     uppercasePattern.test(password) &&
     specialCharOrNumberPattern.test(password)
   );
+};
+
+export const hashPassword = async (password: string): Promise<string> => {
+  const salt = await bcrypt.genSalt(10);
+  return bcrypt.hash(password, salt);
+};
+
+export const comparePasswords = async (
+  passwordA: string,
+  passwordB: string
+): Promise<boolean> => {
+  return bcrypt.compare(passwordA, passwordB);
 };

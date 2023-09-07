@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { IUser, User } from "../schemas/user";
-import { sendResetPasswordLink } from "../mailer/resetPasswordLink";
-import { sendPasswordSet } from "../mailer/passwordSet";
+import { sendResetPasswordMail } from "../mailer/resetPasswordLink";
+import { sendPasswordSetMail } from "../mailer/passwordSet";
 import { getHashedToken } from "../utils/tokenGenerator";
 import { isValidEmail } from "../utils/isValidEmail";
-import { PASSWORD_RULES, isValidPassword } from "../utils/isValidPasword";
+import { PASSWORD_RULES, isValidPassword } from "../utils/passwords";
 
 export const forgot_password = async (
   req: Request,
@@ -29,7 +29,7 @@ export const forgot_password = async (
 
     user.resetPasswordToken = hashedResetPasswordToken;
     await user.save();
-    await sendResetPasswordLink(user.email, hashedResetPasswordToken);
+    await sendResetPasswordMail(user.email, hashedResetPasswordToken);
 
     res.status(201).json({ message: "Reset password email sent successfully" });
   } catch (error) {
@@ -64,7 +64,7 @@ export const resetPassword = async (
     user.password = password;
     await user.save();
 
-    await sendPasswordSet(user.email);
+    await sendPasswordSetMail(user.email);
 
     res.json({ message: "Password reset successfully" });
   } catch (error) {

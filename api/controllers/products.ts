@@ -41,7 +41,7 @@ export const createProduct = async (
     res.status(201).json(newProduct);
   } catch (error) {
     console.error("Error creating product:", error);
-    res.status(500).json({ message: "Error creating product" });
+    res.status(500).json({ message: "Error creating product", error });
   }
 };
 
@@ -64,7 +64,7 @@ export const getProductById = async (
     res.status(200).json(product);
   } catch (error) {
     console.error("Error retrieving product:", error);
-    res.status(500).json({ message: "Error retrieving product" });
+    res.status(500).json({ message: "Error retrieving product", error });
   }
 };
 
@@ -92,7 +92,7 @@ export const updateProductById = async (
     res.status(200).json(updatedProduct);
   } catch (error) {
     console.error("Error updating product:", error);
-    res.status(500).json({ message: "Error updating product" });
+    res.status(500).json({ message: "Error updating product", error });
   }
 };
 
@@ -113,6 +113,6 @@ export const deleteProductById = async (
     res.status(204).send();
   } catch (error) {
     console.error("Error deleting product:", error);
-    res.status(500).json({ message: "Error deleting product" });
+    res.status(500).json({ message: "Error deleting product", error });
   }
 };

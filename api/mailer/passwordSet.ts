@@ -3,7 +3,7 @@ import transporter from "./transporter";
 
 dotenv.config();
 
-export const sendPasswordSet = async (recipient: string): Promise<void> => {
+export const sendPasswordSetMail = async (recipient: string): Promise<void> => {
   const link = `https://example.com/sigin`;
   const mailOptions = {
     from: process.env.MAILER_FROM,

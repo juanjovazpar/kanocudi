@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
 
 export const getHashedToken = async (
   expiration: number = 24 * 60 * 60 * 1000
@@ -11,4 +12,13 @@ export const getHashedToken = async (
     .toString("hex")}.${expirationTime}`;
 
   return await bcrypt.hash(verificationToken, salt);
+};
+
+export const getJWToken = (userId: string, email: string): string => {
+  const jwtSecret = process.env.JWT_SECRET || "default-secret";
+  const token: string = jwt.sign({ userId, email }, jwtSecret, {
+    expiresIn: "1h",
+  });
+
+  return token;
 };
