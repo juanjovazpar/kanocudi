@@ -2,6 +2,8 @@ import express, { Router } from "express";
 import { signup, signin } from "../controllers/auth";
 import { forgot_password, resetPassword } from "../controllers/forgotPassword";
 import { verifyUser } from "../controllers/verification";
+import { getLoggedUser } from "../controllers/loggedUser";
+import { authTokenMiddleware } from "../middlewares/authToken";
 
 const router: Router = express.Router();
 
@@ -155,5 +157,21 @@ router.post("/forgot_password/:resetPasswordToken", resetPassword);
  *         description: Email or token not found.
  */
 router.get("/verify/:verificationToken", verifyUser); // TODO: Add authentication middleware to ensure only logged users can verify himself
+
+/**
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     summary: Get logged user information
+ *     tags: [Authentication]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: Logged user data.
+ *       '401':
+ *         description: Authentication failed. User not found | Incorrect password.
+ */
+router.get("/me", authTokenMiddleware, getLoggedUser);
 
 export default router;
