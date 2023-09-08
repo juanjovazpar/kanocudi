@@ -7,6 +7,7 @@ import { createInitialFeatureCategories } from "./db/createFeatureCategories";
 import { createInitialProductStatuses } from "./db/createProductStatuses";
 import swaggerSpec from "./utils/swaggerDoc";
 import authRoutes from "./routes/auth";
+import configRoutes from "./routes/config";
 import productsRoutes from "./routes/products";
 import healthCheckRoutes from "./routes/healthCheck";
 import { authTokenMiddleware } from "./middlewares/authToken";
@@ -44,6 +45,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // API routes
 app.use("/healthcheck", healthCheckRoutes);
 app.use("/auth", authRoutes);
+app.use("/config", configRoutes);
 app.use("/products", authTokenMiddleware, productsRoutes);
 
 const PORT = process.env.API_PORT || 8080;
