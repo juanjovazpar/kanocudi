@@ -20,7 +20,12 @@ export const productOwnershipMiddleware = async (
         .json({ message: "Product ID is missing in the URL" });
     }
 
-    const product: IProduct | null = await Product.findById(productId);
+    const product: IProduct | null = await Product.findById(productId).populate(
+      [
+        { path: "features", select: "-product_id -__v" },
+        { path: "invitations", select: "-product_id -__v" },
+      ]
+    );
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
