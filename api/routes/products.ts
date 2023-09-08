@@ -5,12 +5,14 @@ import {
   getProductById,
   updateProductById,
   deleteProductById,
+  getProductResultsById,
 } from "../controllers/products";
 import {
   createInvitationInProduct,
   updateInvitationInProduct,
   deleteInvitationFromProduct,
 } from "../controllers/invitations";
+import { productOwnershipMiddleware } from "../middlewares/productOwnership";
 
 const router = express.Router();
 
@@ -138,6 +140,32 @@ router.post("/", createProduct);
  *         description: Error retrieving product.
  */
 router.get("/:product_id", getProductById);
+
+/**
+ * @swagger
+ * /products/{product_id}/results:
+ *   get:
+ *     summary: Get a product result by ID
+ *     description: Retrieve a product result by its ID.
+ *     tags:
+ *       - Products
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: product_id
+ *         required: true
+ *         type: string
+ *         description: The ID of the product to retrieve the results.
+ *     responses:
+ *       '200':
+ *         description: A result object.
+ *       '404':
+ *         description: Product not found.
+ *       '500':
+ *         description: Error retrieving results.
+ */
+router.get("/:product_id/results", getProductResultsById);
 
 /**
  * @swagger
