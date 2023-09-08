@@ -37,6 +37,9 @@ const router: Router = express.Router();
  *                 type: string
  *                 format: password
  *                 description: The password for the new user.
+ *             example:
+ *               email: "test@kanocudi.com"
+ *               password: "changeMe123!"
  *     responses:
  *       '201':
  *         description: User created successfully.
@@ -69,6 +72,9 @@ router.post("/signup", signup);
  *                 type: string
  *                 format: password
  *                 description: User password.
+ *             example:
+ *               email: "test@kanocudi.com"
+ *               password: "changeMe123!"
  *     responses:
  *       '200':
  *         description: Signin successful.
@@ -95,6 +101,8 @@ router.post("/signin", signin);
  *                 type: string
  *                 format: email
  *                 description: User email.
+ *             example:
+ *               email: "test@kanocudi.com"
  *     responses:
  *       '200':
  *         description: Reset password email sent successfully.

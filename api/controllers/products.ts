@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { Product } from "../schemas/product";
 import { RequestAuth } from "../middlewares/authToken";
+import { Feature, IFeature } from "../schemas/feature";
+import { IInvitation, Invitation } from "../schemas/invitation";
 
 export const getAllProducts = async (
   req: Request,
@@ -9,11 +11,9 @@ export const getAllProducts = async (
   try {
     const userId = (req as RequestAuth).user._id;
 
-    const products = await Product.find({ owner: userId });
-    /* TODO: Populate features and invitations:
+    const products = await Product.find({ owner: userId })
       .populate("features")
       .populate("invitations");
-    */
 
     res.status(200).json(products);
   } catch (error) {
@@ -27,7 +27,7 @@ export const createProduct = async (
 ): Promise<void> => {
   try {
     const userId = (req as RequestAuth).user._id;
-    const { name, description } = req.body;
+    const { name, description, features, invitations } = req.body;
 
     const newProduct = new Product({
       name,
@@ -37,9 +37,46 @@ export const createProduct = async (
       invitations: [],
     });
 
+    const newFeaturesPromises = features
+      ?.filter((featureData: IFeature) => featureData?.name)
+      .map(async (featureData: IFeature) => {
+        const { name, description, positive_question, negative_question } =
+          featureData;
+
+        const feature = new Feature({
+          name,
+          description,
+          positive_question,
+          negative_question,
+          product_id: newProduct._id,
+        });
+
+        await feature.save();
+        return feature._id;
+      });
+
+    const newInvitationsPromises = invitations
+      ?.filter((invitationData: IInvitation) => invitationData?.email)
+      .map(async (invitationData: IInvitation) => {
+        const { email } = invitationData;
+
+        const invitation = new Invitation({
+          email,
+          product_id: newProduct._id,
+        });
+
+        await invitation.save();
+        return invitation._id;
+      });
+
+    newProduct.features = await Promise.all(newFeaturesPromises);
+    newProduct.invitations = await Promise.all(newInvitationsPromises);
+
     await newProduct.save();
 
-    res.status(201).json(newProduct);
+    const populatedProduct = await newProduct.populate("features");
+
+    res.status(201).json(populatedProduct);
   } catch (error) {
     res.status(500).json({ message: "Error creating product", error });
   }
@@ -52,11 +89,9 @@ export const getProductById = async (
   try {
     const productId = req.params.product_id;
 
-    const product = await Product.findById(productId);
-    /* TODO: Populate features and invitations:
+    const product = await Product.findById(productId)
       .populate("features")
       .populate("invitations");
-    */
 
     if (!product) {
       res.status(404).json({ message: "Product not found" });
@@ -81,11 +116,9 @@ export const updateProductById = async (
       productId,
       { name, description },
       { new: true }
-    );
-    /* TODO: Populate features and invitations:
+    )
       .populate("features")
       .populate("invitations");
-    */
 
     if (!updatedProduct) {
       res.status(404).json({ message: "Product not found" });
@@ -112,7 +145,7 @@ export const deleteProductById = async (
       return;
     }
 
-    res.status(204).send();
+    res.status(204).send().json(deletedProduct);
   } catch (error) {
     res.status(500).json({ message: "Error deleting product", error });
   }

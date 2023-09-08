@@ -26,14 +26,12 @@ const productSchema: Schema<IProduct> = new Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Feature",
-      default: [],
     },
   ],
   invitations: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Invitation",
-      default: [],
     },
   ],
   description: String,
