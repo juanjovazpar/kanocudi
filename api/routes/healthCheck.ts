@@ -4,8 +4,14 @@ const router: Router = express.Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Health Check
+ *   description: Check if the API is working correctly.
+ */
+/**
+ * @swagger
  * /healthCheck:
- *   post:
+ *   get:
  *     summary: Health check for the API
  *     description: Check if the API is working correctly.
  *     tags:
@@ -14,7 +20,7 @@ const router: Router = express.Router();
  *       200:
  *         description: API is up and running.
  */
-router.post("/", (_: Request, res: Response) => {
+router.get("/", (_: Request, res: Response) => {
   res.sendStatus(200);
 });
 

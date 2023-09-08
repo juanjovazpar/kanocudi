@@ -3,6 +3,7 @@ import { Product } from "../schemas/product";
 import { RequestAuth } from "../middlewares/authToken";
 import { Feature, IFeature } from "../schemas/feature";
 import { IInvitation, Invitation } from "../schemas/invitation";
+import { isValidEmail } from "../utils/isValidEmail";
 
 export const getAllProducts = async (
   req: Request,
@@ -11,9 +12,10 @@ export const getAllProducts = async (
   try {
     const userId = (req as RequestAuth).user._id;
 
-    const products = await Product.find({ owner: userId })
-      .populate("features")
-      .populate("invitations");
+    const products = await Product.find({ owner: userId }).populate([
+      { path: "features", select: "-product_id -__v" },
+      { path: "invitations", select: "-product_id -__v" },
+    ]);
 
     res.status(200).json(products);
   } catch (error) {
@@ -56,7 +58,10 @@ export const createProduct = async (
       });
 
     const newInvitationsPromises = invitations
-      ?.filter((invitationData: IInvitation) => invitationData?.email)
+      ?.filter(
+        (invitationData: IInvitation) =>
+          invitationData?.email && isValidEmail(invitationData.email)
+      )
       .map(async (invitationData: IInvitation) => {
         const { email } = invitationData;
 
@@ -74,7 +79,10 @@ export const createProduct = async (
 
     await newProduct.save();
 
-    const populatedProduct = await newProduct.populate("features");
+    const populatedProduct = await newProduct.populate({
+      path: "features",
+      select: "-product_id -__v",
+    });
 
     res.status(201).json(populatedProduct);
   } catch (error) {
@@ -89,9 +97,10 @@ export const getProductById = async (
   try {
     const productId = req.params.product_id;
 
-    const product = await Product.findById(productId)
-      .populate("features")
-      .populate("invitations");
+    const product = await Product.findById(productId).populate([
+      { path: "features", select: "-product_id -__v" },
+      { path: "invitations", select: "-product_id -__v" },
+    ]);
 
     if (!product) {
       res.status(404).json({ message: "Product not found" });
@@ -116,9 +125,10 @@ export const updateProductById = async (
       productId,
       { name, description },
       { new: true }
-    )
-      .populate("features")
-      .populate("invitations");
+    ).populate([
+      { path: "features", select: "-product_id -__v" },
+      { path: "invitations", select: "-product_id -__v" },
+    ]);
 
     if (!updatedProduct) {
       res.status(404).json({ message: "Product not found" });
@@ -148,5 +158,28 @@ export const deleteProductById = async (
     res.status(204).send().json(deletedProduct);
   } catch (error) {
     res.status(500).json({ message: "Error deleting product", error });
+  }
+};
+
+export const getProductResultsById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const productId = req.params.product_id;
+
+    const product = await Product.findById(productId).populate([
+      { path: "features", select: "-product_id -__v" },
+      { path: "invitations", select: "-product_id -__v" },
+    ]);
+
+    if (!product) {
+      res.status(404).json({ message: "Product not found" });
+      return;
+    }
+
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving product", error });
   }
 };
