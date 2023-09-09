@@ -18,7 +18,7 @@ export const verifyUser = async (
     user.isVerified = true;
     user.verificationToken = undefined;
     await user.save();
-    await sendVerifiedUserMail(user.email);
+    // await sendVerifiedUserMail(user.email);
 
     res.json({ message: "Account verified successfully" });
   } catch (error) {

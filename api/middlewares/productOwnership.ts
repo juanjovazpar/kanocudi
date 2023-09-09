@@ -1,4 +1,4 @@
-import { Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { IProduct, Product } from "../schemas/product";
 import { RequestAuth } from "./authToken";
 
@@ -7,12 +7,12 @@ export interface RequestProduct extends RequestAuth {
 }
 
 export const productOwnershipMiddleware = async (
-  req: RequestProduct,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const productId: string | undefined = req.params.productId;
+    const { productId } = req?.params;
 
     if (!productId) {
       return res
@@ -31,7 +31,7 @@ export const productOwnershipMiddleware = async (
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const loggedInUserId: string = req.user._id.toString();
+    const loggedInUserId: string = (req as RequestAuth).user._id.toString();
 
     if (product.owner._id.toString() !== loggedInUserId) {
       return res.status(403).json({
@@ -39,7 +39,7 @@ export const productOwnershipMiddleware = async (
       });
     }
 
-    req.product = product;
+    (req as RequestProduct).product = product;
 
     next();
   } catch (error) {

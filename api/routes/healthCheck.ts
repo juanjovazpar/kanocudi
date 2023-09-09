@@ -5,17 +5,17 @@ const router: Router = express.Router();
 /**
  * @swagger
  * tags:
- *   name: Health Check
+ *   name: Healthcheck
  *   description: Check if the API is working correctly.
  */
 /**
  * @swagger
- * /healthCheck:
+ * /healthcheck:
  *   get:
- *     summary: Health check for the API
+ *     summary: Healthcheck for the API
  *     description: Check if the API is working correctly.
  *     tags:
- *       - Health Check
+ *       - Healthcheck
  *     responses:
  *       200:
  *         description: API is up and running.

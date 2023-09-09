@@ -6,6 +6,7 @@ import { isValidEmail } from "../utils/isValidEmail";
 import {
   PASSWORD_RULES,
   comparePasswords,
+  hashPassword,
   isValidPassword,
 } from "../utils/passwords";
 
@@ -31,15 +32,16 @@ export const signup = async (
         .json({ message: `Invalid password format. ${PASSWORD_RULES}` });
     }
 
+    const hashedPassword = await hashPassword(password);
     const hashedVerificationToken = await getHashedToken();
     const newUser: IUser = new User({
       email,
-      password,
+      password: hashedPassword,
       verificationToken: hashedVerificationToken,
     });
 
     await newUser.save();
-    await sendVerificationMail(email, hashedVerificationToken);
+    // await sendVerificationMail(email, hashedVerificationToken);
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {

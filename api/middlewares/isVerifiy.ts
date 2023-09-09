@@ -1,27 +1,19 @@
-import { NextFunction, Response } from "express";
+import { Request, NextFunction, Response } from "express";
 import { RequestAuth } from "./authToken";
-import { IUser } from "../schemas/user";
 
 export const isVerifyMiddleware = async (
-  req: RequestAuth,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const user: IUser = req.user;
+    const { isVerified } = (req as RequestAuth).user;
 
-    try {
-      if (!user.isVerified) {
-        return res.status(401).json({ message: "User is not verified" });
-      }
-
-      next();
-    } catch (error) {
-      return res.status(500).json({
-        message: "Error checking if user is verified",
-        error: (error as Error).message,
-      });
+    if (!isVerified) {
+      return res.status(401).json({ message: "User is not verified" });
     }
+
+    next();
   } catch (error) {
     res.status(500).json({ message: "Error in IsVerifyMiddleware", error });
   }

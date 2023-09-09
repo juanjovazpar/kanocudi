@@ -8,13 +8,18 @@ export const getLoggedUser = async (
   res: Response
 ): Promise<Response | void> => {
   try {
-    const { email, name } = (req as RequestAuth).user;
+    const { email, name, isVerified } = (req as RequestAuth).user;
     const statuses = await ProductStatus.find();
     const categories = await FeatureCategory.find();
 
     res
       .status(200)
-      .json({ email, name, initialConfig: { statuses, categories } });
+      .json({
+        email,
+        name,
+        isVerified,
+        initialConfig: { statuses, categories },
+      });
   } catch (error) {
     res.status(500).json({
       message: "User not found",

@@ -14,7 +14,7 @@ export const authTokenMiddleware = async (
   try {
     const token: string | undefined = (
       req.headers.authorization || (req.query.token as string)
-    )?.replace("Bearer ", ""); // TODO: Clean teh headers from this prefix
+    )?.replace("Bearer ", ""); // TODO: Clean the headers from this prefix
 
     if (!token) {
       return res.status(401).json({ message: "Authentication token missing" });

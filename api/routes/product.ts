@@ -1,47 +1,58 @@
 import express from "express";
-import { getAllProducts, createProduct } from "../controllers/products";
-import { productOwnershipMiddleware } from "../middlewares/productOwnership";
-import productRoutes from "./product";
+import {
+  getProductById,
+  updateProductById,
+  deleteProductById,
+  getProductResultsById,
+} from "../controllers/product";
+import invitationsRoutes from "./invitations";
 
 const router = express.Router();
 
 /**
  * @swagger
- * tags:
- *   name: Products
- *   description: Operations related to products
- */
-
-/**
- * @swagger
- * /products:
+ * /products/{product_id}:
  *   get:
- *     summary: Get all products
- *     description: Retrieve a list of all products owned by the user.
+ *     summary: Get a product by ID
+ *     description: Retrieve a product by its ID.
  *     tags:
  *       - Products
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: product_id
+ *         required: true
+ *         type: string
+ *         description: The ID of the product to retrieve.
  *     responses:
  *       '200':
- *         description: A list of products.
+ *         description: A product object.
+ *       '404':
+ *         description: Product not found.
  *       '500':
- *         description: Error retrieving products.
+ *         description: Error retrieving product.
  */
-router.get("/", getAllProducts);
+router.get("/", getProductById);
 
 /**
  * @swagger
- * /products:
- *   post:
- *     summary: Create a new product
- *     description: Create a new product with a name and description.
+ * /products/{product_id}:
+ *   put:
+ *     summary: Update a product by ID
+ *     description: Update a product's name and description by its ID.
  *     tags:
  *       - Products
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: product_id
+ *         required: true
+ *         type: string
+ *         description: The ID of the product to update.
  *     requestBody:
- *       description: Product data.
+ *       description: Updated product data.
  *       required: true
  *       content:
  *         application/json:
@@ -97,13 +108,67 @@ router.get("/", getAllProducts);
  *                 - email: "user1@example.com"
  *                 - email: "user2@example.com"
  *     responses:
- *       '201':
- *         description: Product creation successful.
+ *       '200':
+ *         description: Updated product object.
+ *       '404':
+ *         description: Product not found.
  *       '500':
- *         description: Error creating product.
+ *         description: Error updating product.
  */
-router.post("/", createProduct);
+router.put("/", updateProductById);
 
-router.use("/:product_id", productOwnershipMiddleware, productRoutes);
+/**
+ * @swagger
+ * /products/{product_id}:
+ *   delete:
+ *     summary: Delete a product by ID
+ *     description: Delete a product by its ID.
+ *     tags:
+ *       - Products
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: product_id
+ *         required: true
+ *         type: string
+ *         description: The ID of the product to delete.
+ *     responses:
+ *       '204':
+ *         description: Product deletion successful.
+ *       '404':
+ *         description: Product not found.
+ *       '500':
+ *         description: Error deleting product.
+ */
+router.delete("/", deleteProductById);
+
+/**
+ * @swagger
+ * /products/{product_id}/results:
+ *   get:
+ *     summary: Get a product result by ID
+ *     description: Retrieve a product result by its ID.
+ *     tags:
+ *       - Products
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: product_id
+ *         required: true
+ *         type: string
+ *         description: The ID of the product to retrieve the results.
+ *     responses:
+ *       '200':
+ *         description: A result object.
+ *       '404':
+ *         description: Product not found.
+ *       '500':
+ *         description: Error retrieving results.
+ */
+router.get("/results", getProductResultsById);
+
+router.use("/invitations", invitationsRoutes);
 
 export default router;

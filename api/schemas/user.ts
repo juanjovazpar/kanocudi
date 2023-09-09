@@ -39,8 +39,6 @@ const userSchema: Schema<IUser> = new Schema({
 
 userSchema.pre<IUser>("save", async function (next) {
   try {
-    this.password = await hashPassword(this.password);
-
     if (!this.name) {
       this.name = "Unknown";
     }
