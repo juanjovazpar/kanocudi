@@ -8,12 +8,19 @@ const router = express.Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Invitation
+ *   description: Operations related to an invitation
+ */
+
+/**
+ * @swagger
  * /products/{product_id}/invitations/{invitation_id}:
  *   put:
  *     summary: Update an invitation for a product
  *     description: Update the email of an invitation for a product.
  *     tags:
- *       - Products
+ *       - Invitation
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -55,7 +62,7 @@ router.put("/", updateInvitationInProduct);
  *     summary: Delete an invitation from a product
  *     description: Delete an invitation from a product by its ID.
  *     tags:
- *       - Products
+ *       - Invitation
  *     security:
  *       - bearerAuth: []
  *     parameters:

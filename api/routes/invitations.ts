@@ -7,12 +7,19 @@ const router = express.Router();
 
 /**
  * @swagger
+ * tags:
+ *   name: Invitations
+ *   description: Operations related to a product's invitations
+ */
+
+/**
+ * @swagger
  * /products/{product_id}/invitations:
  *   post:
  *     summary: Create an invitation for a product
  *     description: Create an invitation for a product with a specified email.
  *     tags:
- *       - Products
+ *       - Invitations
  *     security:
  *       - bearerAuth: []
  *     parameters:
