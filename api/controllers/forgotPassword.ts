@@ -29,7 +29,7 @@ export const forgot_password = async (
 
     user.resetPasswordToken = hashedResetPasswordToken;
     await user.save();
-    await sendResetPasswordMail(user.email, hashedResetPasswordToken);
+    // await sendResetPasswordMail(user.email, hashedResetPasswordToken);
 
     res.status(201).json({ message: "Reset password email sent successfully" });
   } catch (error) {
@@ -44,7 +44,7 @@ export const resetPassword = async (
   req: Request,
   res: Response
 ): Promise<Response | void> => {
-  const { resetPasswordToken } = req.params;
+  const { resetPasswordToken } = req?.params;
   const { password } = req.body;
 
   try {
@@ -64,7 +64,7 @@ export const resetPassword = async (
     user.password = password;
     await user.save();
 
-    await sendPasswordSetMail(user.email);
+    // await sendPasswordSetMail(user.email);
 
     res.json({ message: "Password reset successfully" });
   } catch (error) {
