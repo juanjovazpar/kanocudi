@@ -4,10 +4,18 @@ import {
   updateProductById,
   deleteProductById,
   getProductResultsById,
+  sendInvitationsByProductId,
 } from "../controllers/product";
 import invitationsRoutes from "./invitations";
 
 const router = express.Router();
+
+/**
+ * @swagger
+ * tags:
+ *   name: Product
+ *   description: Operations related to a product
+ */
 
 /**
  * @swagger
@@ -16,7 +24,7 @@ const router = express.Router();
  *     summary: Get a product by ID
  *     description: Retrieve a product by its ID.
  *     tags:
- *       - Products
+ *       - Product
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -42,7 +50,7 @@ router.get("/", getProductById);
  *     summary: Update a product by ID
  *     description: Update a product's name and description by its ID.
  *     tags:
- *       - Products
+ *       - Product
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -124,7 +132,7 @@ router.put("/", updateProductById);
  *     summary: Delete a product by ID
  *     description: Delete a product by its ID.
  *     tags:
- *       - Products
+ *       - Product
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -150,7 +158,7 @@ router.delete("/", deleteProductById);
  *     summary: Get a product result by ID
  *     description: Retrieve a product result by its ID.
  *     tags:
- *       - Products
+ *       - Product
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -168,6 +176,32 @@ router.delete("/", deleteProductById);
  *         description: Error retrieving results.
  */
 router.get("/results", getProductResultsById);
+
+/**
+ * @swagger
+ * /products/{product_id}/send:
+ *   get:
+ *     summary: Send invitation by product ID
+ *     description: Send invitation of a product by its ID.
+ *     tags:
+ *       - Product
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: product_id
+ *         required: true
+ *         type: string
+ *         description: The ID of the product to send invitations.
+ *     responses:
+ *       '200':
+ *         description: An update product.
+ *       '404':
+ *         description: Product not found.
+ *       '500':
+ *         description: Error sending invitations.
+ */
+router.get("/results", sendInvitationsByProductId);
 
 router.use("/invitations", invitationsRoutes);
 

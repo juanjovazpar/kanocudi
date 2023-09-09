@@ -21,7 +21,7 @@ const router: Router = express.Router();
  *         description: API is up and running.
  */
 router.get("/", (_: Request, res: Response) => {
-  res.sendStatus(200);
+  res.status(200).json({ message: "Everything is working fine!" });
 });
 
 export default router;
