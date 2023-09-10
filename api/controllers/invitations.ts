@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { isValidEmail } from "../utils/isValidEmail";
 import { IInvitation, Invitation } from "../schemas/invitation";
 import { RequestProduct } from "../middlewares/productOwnership";
+import { getHashedToken } from "../utils/tokenGenerator";
 
 export const createInvitationInProduct = async (
   req: Request,
@@ -26,6 +27,7 @@ export const createInvitationInProduct = async (
     const invitation = new Invitation({
       email,
       product_id: product._id,
+      token: await getHashedToken(20 * 24 * 60 * 60 * 1000),
     });
 
     await invitation.save();
@@ -41,6 +43,6 @@ export const createInvitationInProduct = async (
 
     res.status(201).json(updatedProduct);
   } catch (error) {
-    res.status(500).json({ message: "Error creating invitation" });
+    res.status(500).json({ message: "Error creating invitation", error });
   }
 };

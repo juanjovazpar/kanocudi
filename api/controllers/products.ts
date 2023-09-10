@@ -4,6 +4,7 @@ import { RequestAuth } from "../middlewares/authToken";
 import { Feature, IFeature } from "../schemas/feature";
 import { IInvitation, Invitation } from "../schemas/invitation";
 import { isValidEmail } from "../utils/isValidEmail";
+import { getHashedToken } from "../utils/tokenGenerator";
 
 export const getAllProducts = async (
   req: Request,
@@ -68,6 +69,7 @@ export const createProduct = async (
         const invitation = new Invitation({
           email,
           product_id: newProduct._id,
+          token: await getHashedToken(20 * 24 * 60 * 60 * 1000),
         });
 
         await invitation.save();
@@ -79,12 +81,12 @@ export const createProduct = async (
 
     await newProduct.save();
 
-    const populatedProduct = await newProduct.populate({
-      path: "features",
-      select: "-product_id -__v",
-    });
+    const updatedProduct = await newProduct.populate([
+      { path: "features", select: "-product_id -__v -questionaries" },
+      { path: "invitations", select: "-product_id -__v -token" },
+    ]);
 
-    res.status(201).json(populatedProduct);
+    res.status(201).json(updatedProduct);
   } catch (error) {
     res.status(500).json({ message: "Error creating product", error });
   }

@@ -13,6 +13,7 @@ interface IFeature extends Document {
 }
 
 const featureSchema: Schema<IFeature> = new Schema({
+  description: String,
   name: {
     type: String,
     required: true,
@@ -42,7 +43,6 @@ const featureSchema: Schema<IFeature> = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "FeatureCategory",
   },
-  description: String,
 });
 
 featureSchema.index({ name: 1, product_id: 1 }, { unique: true });

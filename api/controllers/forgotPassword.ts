@@ -4,7 +4,12 @@ import { sendResetPasswordMail } from "../mailer/resetPasswordLink";
 import { sendPasswordSetMail } from "../mailer/passwordSet";
 import { getHashedToken } from "../utils/tokenGenerator";
 import { isValidEmail } from "../utils/isValidEmail";
-import { PASSWORD_RULES, isValidPassword } from "../utils/passwords";
+import {
+  PASSWORD_RULES,
+  comparePasswords,
+  hashPassword,
+  isValidPassword,
+} from "../utils/passwords";
 
 export const forgot_password = async (
   req: Request,
@@ -60,8 +65,21 @@ export const resetPassword = async (
         .json({ message: `Invalid password format. ${PASSWORD_RULES}` });
     }
 
+    const passwordMatch: boolean = await comparePasswords(
+      password,
+      user.password
+    );
+
+    if (passwordMatch) {
+      return res
+        .status(401)
+        .json({ message: "You must define a password never used before." });
+    }
+
+    const hashedPassword = await hashPassword(password);
+
     user.resetPasswordToken = undefined;
-    user.password = password;
+    user.password = hashedPassword;
     await user.save();
 
     // await sendPasswordSetMail(user.email);

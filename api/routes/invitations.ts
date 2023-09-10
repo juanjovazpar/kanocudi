@@ -49,6 +49,6 @@ const router = express.Router();
  */
 router.post("/", createInvitationInProduct);
 
-router.use("/:invitations_id", invitationOwnershipMiddleware, invitationRoutes);
+router.use("/:invitation_id", invitationOwnershipMiddleware, invitationRoutes);
 
 export default router;
