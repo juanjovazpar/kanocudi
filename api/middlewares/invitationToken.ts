@@ -12,10 +12,13 @@ export const invitationTokenMiddleware = async (
   res: Response,
   next: NextFunction
 ): Promise<Response | void> => {
-  const { invitationToken } = req.params;
-
   try {
-    const invitation = await Invitation.findOne({ token: invitationToken });
+    const { invitation_token } = req?.params;
+
+    if (!invitation_token) {
+      return res.status(401).json({ message: "No invitation token provided" });
+    }
+    const invitation = await Invitation.findOne({ token: invitation_token });
 
     if (!invitation) {
       return res.status(401).json({ message: "Invalid invitation token" });

@@ -1,5 +1,8 @@
 import express from "express";
-import { getAllProducts, createProduct } from "../controllers/products";
+import {
+  getResponseByInvitationToken,
+  responseByInvitationToken,
+} from "../controllers/response";
 
 const router = express.Router();
 
@@ -12,28 +15,40 @@ const router = express.Router();
 
 /**
  * @swagger
- * /response/{invitationToken}:
+ * /response/{invitation_token}:
  *   get:
  *     summary: Get questionary
  *     description: Retrieve a questionary
  *     tags:
  *       - Response
+ *     parameters:
+ *       - in: path
+ *         name: invitation_token
+ *         required: true
+ *         type: string
+ *         description: The ID of the invitation to get the questionary.
  *     responses:
  *       '200':
- *         description: A questionary.
+ *         description: A questionary related with the invitation.
  *       '500':
  *         description: Error retrieving questionary.
  */
-router.get("/:invitationToken", getAllProducts);
+router.get("/", getResponseByInvitationToken);
 
 /**
  * @swagger
- * /response/{invitationToken}:
+ * /response/{invitation_token}:
  *   post:
  *     summary: Reply questionary
  *     description: Reply questionary.
  *     tags:
  *       - Response
+ *     parameters:
+ *       - in: path
+ *         name: invitation_token
+ *         required: true
+ *         type: string
+ *         description: The ID of the invitation to get the questionary.
  *     requestBody:
  *       description: Product data.
  *       required: true
@@ -51,6 +66,6 @@ router.get("/:invitationToken", getAllProducts);
  *       '500':
  *         description: Error replying questionary.
  */
-router.post("/:invitationToken", createProduct);
+router.post("/", responseByInvitationToken);
 
 export default router;
