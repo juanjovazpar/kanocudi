@@ -40,7 +40,11 @@ app.use(morgan(process.env.MORGAN_MODE || "dev")); // TODO: "dev" | "combined" |
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/healthcheck", healthcheckRoutes);
 app.use("/auth", authRoutes);
-app.use("/response", invitationTokenMiddleware, responseRoutes);
+app.use(
+  "/response/:invitation_token",
+  invitationTokenMiddleware,
+  responseRoutes
+);
 app.use("/products", authTokenMiddleware, isVerifyMiddleware, productsRoutes);
 
 const PORT = process.env.API_PORT || 8080;

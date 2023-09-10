@@ -1,5 +1,4 @@
 import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
-import { hashPassword } from "../utils/passwords";
 
 interface IUser extends Document {
   email: string;

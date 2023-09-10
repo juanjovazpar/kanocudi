@@ -5,6 +5,7 @@ interface IInvitation extends Document {
   email: string;
   token: string;
   sent_date?: Date;
+  replied_date?: Date;
 }
 
 const invitationSchema: Schema<IInvitation> = new Schema({
@@ -22,6 +23,9 @@ const invitationSchema: Schema<IInvitation> = new Schema({
     required: true,
   },
   sent_date: {
+    type: Date,
+  },
+  replied_date: {
     type: Date,
   },
 });
