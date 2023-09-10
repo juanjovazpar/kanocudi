@@ -8,6 +8,7 @@ interface IProduct extends Document {
   owner: mongoose.Types.ObjectId;
   features: mongoose.Types.ObjectId[];
   invitations: mongoose.Types.ObjectId[];
+  questionaries: mongoose.Types.ObjectId[];
   description?: string;
 }
 
@@ -32,6 +33,12 @@ const productSchema: Schema<IProduct> = new Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Invitation",
+    },
+  ],
+  questionaries: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Questionary",
     },
   ],
   description: String,

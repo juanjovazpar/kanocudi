@@ -4,9 +4,24 @@ import {
   SENT_STATUS,
   COMPLETE_STATUS,
 } from "../db/createProductStatuses";
+import { IInvitation } from "../schemas/invitation";
 import { IProduct } from "../schemas/product";
 
+const MIN_FEATURES = 5;
+const MIN_RESPONSES = 10;
+
 export const getProductCategory = (product: IProduct): string => {
-  //if() {return DRAFT_STATUS} else if() {return READY_STATUS} else if() {return SENT_STATUS} else{return COMPLETE_STATUS}
-  return DRAFT_STATUS;
+  if (product?.features?.length >= MIN_FEATURES) {
+    return READY_STATUS;
+  } else if (
+    product?.invitations?.filter(
+      (invitation) => (invitation as unknown as IInvitation)?.sent_date
+    ).length >= 0
+  ) {
+    return SENT_STATUS;
+  } else if (product?.questionaries?.length >= MIN_RESPONSES) {
+    return COMPLETE_STATUS;
+  } else {
+    return DRAFT_STATUS;
+  }
 };
