@@ -1,5 +1,4 @@
-import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
-import { getHashedToken } from "../utils/tokenGenerator";
+import mongoose, { Document, Schema, Model } from "mongoose";
 
 interface IInvitation extends Document {
   product_id: mongoose.Types.ObjectId;
@@ -31,17 +30,5 @@ const Invitation: Model<IInvitation> = mongoose.model<IInvitation>(
   "Invitation",
   invitationSchema
 );
-
-invitationSchema.pre<IInvitation>("save", async function (next) {
-  try {
-    if (!this.token) {
-      this.token = await getHashedToken(20 * 24 * 60 * 60 * 1000);
-    }
-
-    next();
-  } catch (error) {
-    next(error as CallbackError);
-  }
-});
 
 export { Invitation, IInvitation };

@@ -12,20 +12,20 @@ export const productOwnershipMiddleware = async (
   next: NextFunction
 ): Promise<Response | void> => {
   try {
-    const { productId } = req?.params;
+    const { product_id } = req?.params;
 
-    if (!productId) {
+    if (!product_id) {
       return res
         .status(400)
         .json({ message: "Product ID is missing in the URL" });
     }
 
-    const product: IProduct | null = await Product.findById(productId).populate(
-      [
-        { path: "features", select: "-product_id -__v" },
-        { path: "invitations", select: "-product_id -__v" },
-      ]
-    );
+    const product: IProduct | null = await Product.findById(
+      product_id
+    ).populate([
+      { path: "features", select: "-product_id -__v -questionaries" },
+      { path: "invitations", select: "-product_id -__v" },
+    ]);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });

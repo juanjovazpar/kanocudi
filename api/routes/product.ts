@@ -201,7 +201,7 @@ router.get("/results", getProductResultsById);
  *       '500':
  *         description: Error sending invitations.
  */
-router.get("/results", sendInvitationsByProductId);
+router.get("/send", sendInvitationsByProductId);
 
 router.use("/invitations", invitationsRoutes);
 

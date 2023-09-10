@@ -13,16 +13,17 @@ export const invitationOwnershipMiddleware = async (
 ): Promise<Response | void> => {
   try {
     const product = (req as RequestProduct).product;
-    const { invitationId } = req?.params;
+    const { invitation_id } = req?.params;
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
     if (
+      !invitation_id ||
       !product.invitations
         .map((invitation) => invitation?._id?.toString())
-        .includes(invitationId)
+        .includes(invitation_id)
     ) {
       return res.status(403).json({
         message: "This invitation doesn't belong to the product.",
@@ -30,7 +31,7 @@ export const invitationOwnershipMiddleware = async (
     }
 
     const invitation: IInvitation | null = await Invitation.findById(
-      invitationId
+      invitation_id
     );
 
     if (!invitation) {

@@ -8,9 +8,11 @@ import { createInitialProductStatuses } from "./db/createProductStatuses";
 import swaggerSpec from "./utils/swaggerDoc";
 import healthcheckRoutes from "./routes/healthcheck";
 import authRoutes from "./routes/auth";
+import responseRoutes from "./routes/response";
 import productsRoutes from "./routes/products";
 import { authTokenMiddleware } from "./middlewares/authToken";
 import { isVerifyMiddleware } from "./middlewares/isVerifiy";
+import { invitationTokenMiddleware } from "./middlewares/invitationToken";
 
 dotenv.config();
 
@@ -36,9 +38,9 @@ app.use(express.json());
 app.use(morgan(process.env.MORGAN_MODE || "dev")); // TODO: "dev" | "combined" | "common"
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 app.use("/healthcheck", healthcheckRoutes);
 app.use("/auth", authRoutes);
+app.use("/response", invitationTokenMiddleware, responseRoutes);
 app.use("/products", authTokenMiddleware, isVerifyMiddleware, productsRoutes);
 
 const PORT = process.env.API_PORT || 8080;

@@ -13,6 +13,12 @@ export const updateInvitationInProduct = async (
     const invitation = (req as RequestInvitation).invitation;
     const { email } = req.body;
 
+    if (invitation.sent_date) {
+      return res
+        .status(400)
+        .json({ message: "Invitation already sent. It can't be updated." });
+    }
+
     if (
       product.invitations
         .map((invitation) => (invitation as unknown as IInvitation)?.email)
@@ -47,6 +53,12 @@ export const deleteInvitationFromProduct = async (
   try {
     const product = (req as RequestProduct).product;
     const invitation = (req as RequestInvitation).invitation;
+
+    if (invitation.sent_date) {
+      return res
+        .status(400)
+        .json({ message: "Invitation already sent. It can't be deleted." });
+    }
 
     invitation.deleteOne();
 
