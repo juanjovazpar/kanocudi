@@ -19,15 +19,15 @@ export const forgot_password = async (
     const { email } = req.body;
 
     if (!isValidEmail(email)) {
-      return res.status(400).json({ message: "Invalid email format" });
+      res.status(400).json({ message: "Invalid email format" });
+      return;
     }
 
     const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
-      return res
-        .status(401)
-        .json({ message: "Request failed. User not found." });
+      res.status(401).json({ message: "Request failed. User not found." });
+      return;
     }
 
     const hashedResetPasswordToken = await getHashedToken(60 * 60 * 1000);
@@ -56,13 +56,15 @@ export const resetPassword = async (
     const user = await User.findOne({ resetPasswordToken });
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid reset password token" });
+      res.status(401).json({ message: "Invalid reset password token" });
+      return;
     }
 
     if (!password || !isValidPassword(password)) {
-      return res
+      res
         .status(400)
         .json({ message: `Invalid password format. ${PASSWORD_RULES}` });
+      return;
     }
 
     const passwordMatch: boolean = await comparePasswords(
@@ -71,9 +73,10 @@ export const resetPassword = async (
     );
 
     if (passwordMatch) {
-      return res
+      res
         .status(401)
         .json({ message: "You must define a password never used before." });
+      return;
     }
 
     const hashedPassword = await hashPassword(password);

@@ -36,8 +36,8 @@ export const updateProductById = async (
       { name, description },
       { new: true }
     ).populate([
-      { path: "features", select: "-product_id -__v" },
-      { path: "invitations", select: "-product_id -__v" },
+      { path: "features", select: "-product -__v" },
+      { path: "invitations", select: "-product -__v" },
     ]);
 
     if (!updatedProduct) {
@@ -124,8 +124,8 @@ export const sendInvitationsByProductId = async (
     await Promise.all(mailPromises);
 
     await product.populate([
-      { path: "features", select: "-product_id -__v -questionaries" },
-      { path: "invitations", select: "-product_id -__v" },
+      { path: "features", select: "-product -__v -questionaries" },
+      { path: "invitations", select: "-product -__v" },
     ]);
 
     res.status(200).json(product);

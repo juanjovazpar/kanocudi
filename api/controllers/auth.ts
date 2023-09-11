@@ -19,17 +19,20 @@ export const signup = async (
     const existingUser: IUser | null = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" });
+      res.status(400).json({ message: "Email already exists" });
+      return;
     }
 
     if (!isValidEmail(email)) {
-      return res.status(400).json({ message: "Invalid email format" });
+      res.status(400).json({ message: "Invalid email format" });
+      return;
     }
 
     if (!isValidPassword(password)) {
-      return res
+      res
         .status(400)
         .json({ message: `Invalid password format. ${PASSWORD_RULES}` });
+      return;
     }
 
     const hashedPassword = await hashPassword(password);
@@ -59,9 +62,10 @@ export const signin = async (
     const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
-      return res
+      res
         .status(401)
         .json({ message: "Authentication failed. User not found." });
+      return;
     }
 
     const passwordMatch: boolean = await comparePasswords(
@@ -70,11 +74,15 @@ export const signin = async (
     );
 
     if (!passwordMatch) {
-      return res
+      res
         .status(401)
         .json({ message: "Authentication failed. Incorrect password." });
+      return;
     }
     const token: string = getJWToken(user._id, user.email);
+
+    user.last_login = new Date();
+    await user.save();
 
     res.status(200).json({ token, userId: user._id, email: user.email });
   } catch (error) {

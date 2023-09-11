@@ -1,24 +1,53 @@
-import mongoose, { Document, Schema, Model } from "mongoose";
+import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
 
-interface IResponse extends Document {
-  questionary_id: mongoose.Types.ObjectId;
-  question_id: "positive" | "negative";
-  answer: string;
+interface IQuestionaryResponse extends Document {
+  product: mongoose.Types.ObjectId;
+  answers: mongoose.Types.ObjectId[];
+  invitation?: mongoose.Types.ObjectId;
+  creation_date: Date;
 }
 
-const responseSchema: Schema<IResponse> = new Schema({
-  questionary_id: {
+const questionaryResponseSchema: Schema<IQuestionaryResponse> = new Schema({
+  product: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Questionary",
+    ref: "Product",
     required: true,
   },
-  question_id: { type: String, required: true },
-  answer: { type: String, required: true },
+  answers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Answer",
+      required: true,
+    },
+  ],
+  invitation: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Invitation",
+  },
+  creation_date: {
+    type: Date,
+  },
 });
 
-const Response: Model<IResponse> = mongoose.model<IResponse>(
-  "Response",
-  responseSchema
+questionaryResponseSchema.pre<IQuestionaryResponse>(
+  "save",
+  async function (next) {
+    try {
+      if (!this.creation_date) {
+        this.creation_date = new Date();
+      }
+
+      next();
+    } catch (error) {
+      next(error as CallbackError);
+    }
+  }
 );
 
-export { Response, IResponse };
+const QuestionaryResponse: Model<IQuestionaryResponse> =
+  mongoose.model<IQuestionaryResponse>(
+    "QuestionaryResponse",
+    questionaryResponseSchema
+  );
+
+export { QuestionaryResponse, IQuestionaryResponse };

@@ -41,7 +41,7 @@ const featureCategoriesData: any[] = [
   },
 ];
 
-export async function createInitialFeatureCategories() {
+export async function createInitialFeatureCategories(): Promise<void> {
   try {
     const existingCategories = await FeatureCategory.find({
       name: { $in: featureCategoriesData.map((category) => category.name) },
@@ -56,12 +56,10 @@ export async function createInitialFeatureCategories() {
 
     if (newCategories.length === 0) {
       console.log("All categories already exist.");
-      return;
+    } else {
+      const createdCategories = await FeatureCategory.insertMany(newCategories);
+      console.log("Feature categories created:", createdCategories);
     }
-
-    const createdCategories = await FeatureCategory.insertMany(newCategories);
-
-    console.log("Feature categories created:", createdCategories);
   } catch (error) {
     console.error("Error creating feature categories:", error);
   }

@@ -1,15 +1,15 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 
 interface IInvitation extends Document {
-  product_id: mongoose.Types.ObjectId;
+  product: mongoose.Types.ObjectId;
   email: string;
   token: string;
   sent_date?: Date;
-  replied_date?: Date;
+  response?: mongoose.Types.ObjectId;
 }
 
 const invitationSchema: Schema<IInvitation> = new Schema({
-  product_id: {
+  product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
     required: true,
@@ -25,8 +25,9 @@ const invitationSchema: Schema<IInvitation> = new Schema({
   sent_date: {
     type: Date,
   },
-  replied_date: {
-    type: Date,
+  response: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Response",
   },
 });
 

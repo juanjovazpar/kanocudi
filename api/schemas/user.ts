@@ -7,6 +7,8 @@ interface IUser extends Document {
   isVerified: boolean;
   verificationToken?: string;
   resetPasswordToken?: string;
+  last_login?: Date;
+  creation_date?: Date;
 }
 
 const userSchema: Schema<IUser> = new Schema({
@@ -34,12 +36,22 @@ const userSchema: Schema<IUser> = new Schema({
   resetPasswordToken: {
     type: String,
   },
+  last_login: {
+    type: Date,
+  },
+  creation_date: {
+    type: Date,
+  },
 });
 
 userSchema.pre<IUser>("save", async function (next) {
   try {
     if (!this.name) {
       this.name = "Unknown";
+    }
+
+    if (!this.creation_date) {
+      this.creation_date = new Date();
     }
 
     next();

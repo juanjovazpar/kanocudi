@@ -14,8 +14,8 @@ export const getAllProducts = async (
     const userId = (req as RequestAuth).user._id;
 
     const products = await Product.find({ owner: userId }).populate([
-      { path: "features", select: "-product_id -__v" },
-      { path: "invitations", select: "-product_id -__v" },
+      { path: "features", select: "-product -__v" },
+      { path: "invitations", select: "-product -__v" },
     ]);
 
     res.status(200).json(products);
@@ -51,7 +51,7 @@ export const createProduct = async (
           description,
           positive_question,
           negative_question,
-          product_id: newProduct._id,
+          product: newProduct._id,
         });
 
         await feature.save();
@@ -68,7 +68,7 @@ export const createProduct = async (
 
         const invitation = new Invitation({
           email,
-          product_id: newProduct._id,
+          product: newProduct._id,
           token: await getHashedToken(20 * 24 * 60 * 60 * 1000),
         });
 
@@ -82,8 +82,8 @@ export const createProduct = async (
     await newProduct.save();
 
     const updatedProduct = await newProduct.populate([
-      { path: "features", select: "-product_id -__v -questionaries" },
-      { path: "invitations", select: "-product_id -__v -token" },
+      { path: "features", select: "-product -__v -questionaries" },
+      { path: "invitations", select: "-product -__v -token" },
     ]);
 
     res.status(201).json(updatedProduct);

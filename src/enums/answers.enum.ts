@@ -1,7 +1,7 @@
 export enum ANSWER {
-  LIKED,
-  EXPECTED,
-  NEUTRAL,
-  TOLERATE,
   DISLIKE,
+  TOLERATE,
+  NEUTRAL,
+  EXPECTED,
+  LIKED,
 }
