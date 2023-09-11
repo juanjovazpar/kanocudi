@@ -3,7 +3,7 @@ import mongoose, { Document, Schema, Model } from "mongoose";
 interface IInvitation extends Document {
   product: mongoose.Types.ObjectId;
   email: string;
-  token: string;
+  token?: string;
   sent_date?: Date;
   response?: mongoose.Types.ObjectId;
 }
@@ -20,7 +20,6 @@ const invitationSchema: Schema<IInvitation> = new Schema({
   },
   token: {
     type: String,
-    required: true,
   },
   sent_date: {
     type: Date,

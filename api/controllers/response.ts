@@ -105,6 +105,10 @@ export const responseByInvitationToken = async (
 
     await newResponse.save();
 
+    invitation.token = undefined;
+    invitation.response = newResponse._id;
+    await invitation.save();
+
     (product as unknown as IProduct).responses.push(newResponse._id);
     await product.save();
 
