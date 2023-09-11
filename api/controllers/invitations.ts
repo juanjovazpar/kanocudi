@@ -13,7 +13,8 @@ export const createInvitationInProduct = async (
     const { email } = req.body;
 
     if (!isValidEmail(email)) {
-      return res.status(400).json({ message: "Invalid email format" });
+      res.status(400).json({ message: "Invalid email format" });
+      return;
     }
 
     const invitationEmails = (
@@ -21,12 +22,13 @@ export const createInvitationInProduct = async (
     ).map((invitation) => invitation?.email);
 
     if (invitationEmails.includes(email)) {
-      return res.status(404).json({ message: "Email already invited" });
+      res.status(404).json({ message: "Email already invited" });
+      return;
     }
 
     const invitation = new Invitation({
       email,
-      product_id: product._id,
+      product: product._id,
       token: await getHashedToken(20 * 24 * 60 * 60 * 1000),
     });
 
@@ -37,8 +39,8 @@ export const createInvitationInProduct = async (
     await product.save();
 
     const updatedProduct = await product.populate([
-      { path: "features", select: "-product_id -__v" },
-      { path: "invitations", select: "-product_id -__v" },
+      { path: "features", select: "-product -__v" },
+      { path: "invitations", select: "-product -__v" },
     ]);
 
     res.status(201).json(updatedProduct);

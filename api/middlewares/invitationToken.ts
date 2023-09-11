@@ -16,20 +16,23 @@ export const invitationTokenMiddleware = async (
     const { invitation_token } = req?.params;
 
     if (!invitation_token) {
-      return res.status(401).json({ message: "No invitation token provided" });
+      res.status(401).json({ message: "No invitation token provided" });
+      return;
     }
     const invitation = await Invitation.findOne({ token: invitation_token });
 
     if (!invitation) {
-      return res.status(401).json({ message: "Invalid invitation token" });
+      res.status(401).json({ message: "Invalid invitation token" });
+      return;
     }
 
     const product: IProduct | null = await Product.findById(
-      invitation.product_id
-    ).populate([{ path: "features", select: "-product_id -__v" }]);
+      invitation.product
+    ).populate([{ path: "features", select: "-product -__v" }]);
 
     if (!product) {
-      return res.status(401).json({ message: "Product not found" });
+      res.status(401).json({ message: "Product not found" });
+      return;
     }
 
     (req as RequestInvitation).invitation = invitation;

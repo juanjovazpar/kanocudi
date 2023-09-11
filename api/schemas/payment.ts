@@ -1,20 +1,20 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 
 interface IPayment extends Document {
-  user_id: mongoose.Types.ObjectId;
-  product_id: mongoose.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
+  product: mongoose.Types.ObjectId;
   amount: number;
   payment_date: Date;
   payment_status: string;
 }
 
 const paymentSchema: Schema<IPayment> = new Schema({
-  user_id: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  product_id: {
+  product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
     required: true,

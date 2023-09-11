@@ -3,11 +3,10 @@ import { IFeatureCategory } from "./featureCategory";
 import { getKanoQuestion } from "../utils/questionGenerator";
 
 interface IFeature extends Document {
+  product: mongoose.Types.ObjectId;
   name: string;
   positive_question: string;
   negative_question: string;
-  product_id: mongoose.Types.ObjectId;
-  questionaries?: mongoose.Types.ObjectId[];
   category?: IFeatureCategory["_id"];
   description?: string;
 }
@@ -28,24 +27,18 @@ const featureSchema: Schema<IFeature> = new Schema({
     required: true,
     default: "Default Negative Question",
   },
-  product_id: {
+  product: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Product",
     required: true,
   },
-  questionaries: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Questionary",
-    },
-  ],
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "FeatureCategory",
   },
 });
 
-featureSchema.index({ name: 1, product_id: 1 }, { unique: true });
+featureSchema.index({ name: 1, product: 1 }, { unique: true });
 
 featureSchema.pre<IFeature>("save", async function (next) {
   try {

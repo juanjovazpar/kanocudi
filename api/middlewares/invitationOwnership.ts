@@ -16,7 +16,8 @@ export const invitationOwnershipMiddleware = async (
     const { invitation_id } = req?.params;
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      res.status(404).json({ message: "Product not found" });
+      return;
     }
 
     if (
@@ -25,9 +26,10 @@ export const invitationOwnershipMiddleware = async (
         .map((invitation) => invitation?._id?.toString())
         .includes(invitation_id)
     ) {
-      return res.status(403).json({
+      res.status(403).json({
         message: "This invitation doesn't belong to the product.",
       });
+      return;
     }
 
     const invitation: IInvitation | null = await Invitation.findById(
@@ -35,16 +37,18 @@ export const invitationOwnershipMiddleware = async (
     );
 
     if (!invitation) {
-      return res.status(404).json({ message: "Invitation not found" });
+      res.status(404).json({ message: "Invitation not found" });
+      return;
     }
 
     (req as RequestInvitation).invitation = invitation;
 
     next();
   } catch (error) {
-    return res.status(500).json({
+    res.status(500).json({
       message: "Error validating invitation ownership",
       error,
     });
+    return;
   }
 };

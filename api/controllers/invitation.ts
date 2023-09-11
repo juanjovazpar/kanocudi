@@ -14,9 +14,10 @@ export const updateInvitationInProduct = async (
     const { email } = req.body;
 
     if (invitation.sent_date) {
-      return res
+      res
         .status(400)
         .json({ message: "Invitation already sent. It can't be updated." });
+      return;
     }
 
     if (
@@ -24,11 +25,13 @@ export const updateInvitationInProduct = async (
         .map((invitation) => (invitation as unknown as IInvitation)?.email)
         .includes(email)
     ) {
-      return res.status(400).json({ message: "Email already invited" });
+      res.status(400).json({ message: "Email already invited" });
+      return;
     }
 
     if (!isValidEmail(email)) {
-      return res.status(400).json({ message: "Invalid email format" });
+      res.status(400).json({ message: "Invalid email format" });
+      return;
     }
 
     invitation.email = email;
@@ -36,8 +39,8 @@ export const updateInvitationInProduct = async (
     await invitation.save();
 
     const updatedProduct = await product.populate([
-      { path: "features", select: "-product_id -__v" },
-      { path: "invitations", select: "-product_id -__v" },
+      { path: "features", select: "-product -__v" },
+      { path: "invitations", select: "-product -__v" },
     ]);
 
     res.status(200).json(updatedProduct);
@@ -55,9 +58,10 @@ export const deleteInvitationFromProduct = async (
     const invitation = (req as RequestInvitation).invitation;
 
     if (invitation.sent_date) {
-      return res
+      res
         .status(400)
         .json({ message: "Invitation already sent. It can't be deleted." });
+      return;
     }
 
     invitation.deleteOne();
@@ -70,8 +74,8 @@ export const deleteInvitationFromProduct = async (
     await product.save();
 
     const updatedProduct = await product.populate([
-      { path: "features", select: "-product_id -__v" },
-      { path: "invitations", select: "-product_id -__v" },
+      { path: "features", select: "-product -__v" },
+      { path: "invitations", select: "-product -__v" },
     ]);
 
     res.status(200).json(updatedProduct);

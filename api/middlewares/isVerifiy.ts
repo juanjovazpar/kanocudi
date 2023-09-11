@@ -10,7 +10,8 @@ export const isVerifyMiddleware = async (
     const { isVerified } = (req as RequestAuth).user;
 
     if (!isVerified) {
-      return res.status(401).json({ message: "User is not verified" });
+      res.status(401).json({ message: "User is not verified" });
+      return;
     }
 
     next();

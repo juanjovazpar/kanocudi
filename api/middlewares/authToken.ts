@@ -17,20 +17,21 @@ export const authTokenMiddleware = async (
     )?.replace("Bearer ", ""); // TODO: Clean the headers from this prefix
 
     if (!token) {
-      return res.status(401).json({ message: "Authentication token missing" });
+      res.status(401).json({ message: "Authentication token missing" });
+      return;
     }
 
     jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
       if (err) {
-        return res
-          .status(401)
-          .json({ message: "Invalid authentication token" });
+        res.status(401).json({ message: "Invalid authentication token" });
+        return;
       }
 
       User.findById((decoded as JwtPayload).userId)
         .then((user: IUser | null) => {
           if (!user) {
-            return res.status(401).json({ message: "User not found" });
+            res.status(401).json({ message: "User not found" });
+            return;
           }
 
           (req as RequestAuth).user = user;
@@ -38,10 +39,11 @@ export const authTokenMiddleware = async (
           next();
         })
         .catch((error: Error) => {
-          return res.status(500).json({
+          res.status(500).json({
             message: "Error authenticating user",
             error: error.message,
           });
+          return;
         });
     });
   } catch (error) {
