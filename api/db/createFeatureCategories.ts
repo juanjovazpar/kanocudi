@@ -1,8 +1,14 @@
 import { FeatureCategory } from "../schemas/featureCategory";
 
+export const MUST_BE = "must-be";
+export const PERFORMANCE = "performance";
+export const ATRACTIVE = "attractive";
+export const INDIFFERENT = "indifferent";
+export const REVERSE = "reverse";
+
 const featureCategoriesData: any[] = [
   {
-    name: "must-be",
+    name: MUST_BE,
     description: `Essential features that must be present:
       Customers expect these features to be present.
       Their absence would lead to dissatisfaction.
@@ -10,7 +16,7 @@ const featureCategoriesData: any[] = [
       Responses: Expected, not noticed when present, causes dissatisfaction when absent.`,
   },
   {
-    name: "one-dimensional",
+    name: PERFORMANCE,
     description: `Features where quality is linearly related to satisfaction.
       These are features that directly correlate with satisfaction.
       The better these features are, the more satisfied the customers are.
@@ -18,21 +24,21 @@ const featureCategoriesData: any[] = [
       Responses: Linear relationship between feature quality and satisfaction.`,
   },
   {
-    name: "attractive",
+    name: ATRACTIVE,
     description: `Features that delight and surprise customers.
       Their presence can lead to increased satisfaction and loyalty.
       Their absence doesn't necessarily cause dissatisfaction; customers may not expect them.
       Responses: Delight, excitement when present, no dissatisfaction when absent.`,
   },
   {
-    name: "indifferent",
+    name: INDIFFERENT,
     description: `Features that don't significantly impact satisfaction.
       These are features that customers neither care about nor are dissatisfied with when they are absent.
       They have little impact on overall satisfaction.
       Responses: Neutral, no strong feelings either way.`,
   },
   {
-    name: "reverse",
+    name: REVERSE,
     description: `Features that can lead to dissatisfaction when present.
       Features that, when present, lead to dissatisfaction.
       Customers prefer these features to be absent.

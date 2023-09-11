@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
 import { ProductStatus } from "./productStatus"; // Import the ProductStatus interface
 import { DRAFT_STATUS } from "../db/createProductStatuses";
-import { getProductStatus } from "../utils/productCategory";
+import { getProductStatus } from "../utils/productStatus";
 
 interface IProduct extends Document {
   name: string;

@@ -26,6 +26,11 @@ export const invitationTokenMiddleware = async (
       return;
     }
 
+    if (invitation.response) {
+      res.status(401).json({ message: "Invitation token already used" });
+      return;
+    }
+
     const product: IProduct | null = await Product.findById(
       invitation.product
     ).populate([{ path: "features", select: "-product -__v" }]);
