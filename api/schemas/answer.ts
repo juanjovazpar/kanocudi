@@ -1,18 +1,12 @@
 import mongoose, { Document, Schema, Model } from "mongoose";
 
 interface IAnswer extends Document {
-  response: mongoose.Types.ObjectId;
   feature: mongoose.Types.ObjectId;
-  positive_answer: Number;
-  negative_answer: Number;
+  positive_answer: number;
+  negative_answer: number;
 }
 
 const answerSchema: Schema<IAnswer> = new Schema({
-  response: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Response",
-    required: true,
-  },
   feature: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Feature",

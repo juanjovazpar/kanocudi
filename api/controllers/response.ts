@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { RequestProduct } from "../middlewares/productOwnership";
-import { Product } from "../schemas/product";
+import { IProduct, Product } from "../schemas/product";
 import { RequestInvitation } from "../middlewares/invitationOwnership";
 import { IQuestionaryResponse, QuestionaryResponse } from "../schemas/response";
 import { Answer, IAnswer } from "../schemas/answer";
@@ -38,7 +38,7 @@ export const responseByInvitationToken = async (
 ): Promise<void> => {
   try {
     const { product, invitation } = req as RequestInvitation;
-    const answers: IAnswer[] = req.body?.answers;
+    const answers: IAnswer[] = req.body?.response;
 
     if (!product) {
       res.status(404).json({ message: "Product not found" });
@@ -64,27 +64,31 @@ export const responseByInvitationToken = async (
           answer: IAnswer // All properties must exist and answer must be related with an existing feature
         ) =>
           answer.positive_answer != null &&
+          answer.positive_answer >= 0 &&
+          answer.positive_answer < 5 &&
           answer.negative_answer != null &&
+          answer.negative_answer >= 0 &&
+          answer.negative_answer < 5 &&
           answer.feature != null &&
           featuresIds.includes(answer.feature.toString())
       )
       .reduce(
         (acc: { [key: string]: IAnswer }, cur: IAnswer) => ({
           ...acc,
-          [cur._id.toString()]: cur,
+          [cur?.feature?.toString()]: cur,
         }),
         {} as { [key: string]: IAnswer }
       );
 
-    // Check that exist an answer for each feature
-    const questionaryComplete: boolean = featuresIds.reduce(
+    const answerComplete: boolean = featuresIds.reduce(
       (acc: boolean, id: string) => acc && !!answersObject[id],
       true
     );
 
-    if (!questionaryComplete) {
+    if (!answerComplete) {
       res.status(404).json({
-        message: "Some features aren't answer. Please complete the questionary",
+        message:
+          "Some features aren't answer. Please complete the questionary properly",
       });
       return;
     }
@@ -101,7 +105,10 @@ export const responseByInvitationToken = async (
 
     await newResponse.save();
 
-    res.status(200).json({ message: "Thank you" });
+    (product as unknown as IProduct).responses.push(newResponse._id);
+    await product.save();
+
+    res.status(200).json({ message: "Thank you for replying!" });
   } catch (error) {
     res.status(500).json({ message: "Error sending response", error });
   }

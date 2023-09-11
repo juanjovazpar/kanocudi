@@ -10,7 +10,7 @@ import { IProduct } from "../schemas/product";
 const MIN_FEATURES = 5;
 const MIN_RESPONSES = 10;
 
-export const getProductCategory = (product: IProduct): string => {
+export const getProductStatus = (product: IProduct): string => {
   if (product?.features?.length >= MIN_FEATURES) {
     return READY_STATUS;
   } else if (
@@ -19,7 +19,7 @@ export const getProductCategory = (product: IProduct): string => {
     ).length >= 0
   ) {
     return SENT_STATUS;
-  } else if (product?.questionaries?.length >= MIN_RESPONSES) {
+  } else if (product?.responses?.length >= MIN_RESPONSES) {
     return COMPLETE_STATUS;
   } else {
     return DRAFT_STATUS;
