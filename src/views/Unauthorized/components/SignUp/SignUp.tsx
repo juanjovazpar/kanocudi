@@ -1,4 +1,5 @@
 import React from "react";
+import Payment from "../Payment/Payment";
 
 function SignUp() {
   const state = {
@@ -74,6 +75,7 @@ function SignUp() {
           </button>
         </form>
       </div>
+      <Payment />
     </div>
   );
 }
