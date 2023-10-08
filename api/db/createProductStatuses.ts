@@ -1,4 +1,4 @@
-import { ProductStatus } from "../schemas/productStatus";
+import { ProductStatus } from "./schemas/productStatus";
 
 export const DRAFT_STATUS = "draft";
 export const READY_STATUS = "ready";

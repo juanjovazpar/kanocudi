@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IUser, User } from "../schemas/user";
+import { IUser, User } from "../db/schemas/user";
 import { sendVerificationMail } from "../mailer/verificationLink";
 import { getHashedToken, getJWToken } from "../utils/tokenGenerator";
 import { isValidEmail } from "../utils/isValidEmail";

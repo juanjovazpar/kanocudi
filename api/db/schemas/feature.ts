@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
 import { IFeatureCategory } from "./featureCategory";
-import { getKanoQuestion } from "../utils/questionGenerator";
+import { getKanoQuestion } from "../../utils/questionGenerator";
 
 interface IFeature extends Document {
   product: mongoose.Types.ObjectId;

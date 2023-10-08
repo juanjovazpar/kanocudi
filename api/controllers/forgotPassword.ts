@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IUser, User } from "../schemas/user";
+import { IUser, User } from "../db/schemas/user";
 import { sendResetPasswordMail } from "../mailer/resetPasswordLink";
 import { sendPasswordSetMail } from "../mailer/passwordSet";
 import { getHashedToken } from "../utils/tokenGenerator";

@@ -4,8 +4,8 @@ import {
   SENT_STATUS,
   COMPLETE_STATUS,
 } from "../db/createProductStatuses";
-import { IInvitation } from "../schemas/invitation";
-import { IProduct } from "../schemas/product";
+import { IInvitation } from "../db/schemas/invitation";
+import { IProduct } from "../db/schemas/product";
 
 const MIN_FEATURES = 5;
 const MIN_RESPONSES = 10;

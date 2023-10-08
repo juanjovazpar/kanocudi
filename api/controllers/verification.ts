@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "../schemas/user";
+import { User } from "../db/schemas/user";
 import { sendVerifiedUserMail } from "../mailer/verifiedUser";
 
 export const verifyUser = async (
