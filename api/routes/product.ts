@@ -1,12 +1,12 @@
-import express from "express";
+import express from 'express';
 import {
   getProductById,
   updateProductById,
   deleteProductById,
   getProductResultsById,
   sendInvitationsByProductId,
-} from "../controllers/product";
-import invitationsRoutes from "./invitations";
+} from '../controllers/product';
+import invitationsRoutes from './invitations';
 
 const router = express.Router();
 
@@ -19,7 +19,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /products/{product_id}:
+ * /api/products/{product_id}:
  *   get:
  *     summary: Get a product by ID
  *     description: Retrieve a product by its ID.
@@ -41,11 +41,11 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving product.
  */
-router.get("/", getProductById);
+router.get('/', getProductById);
 
 /**
  * @swagger
- * /products/{product_id}:
+ * /api/products/{product_id}:
  *   put:
  *     summary: Update a product by ID
  *     description: Update a product's name and description by its ID.
@@ -123,11 +123,11 @@ router.get("/", getProductById);
  *       '500':
  *         description: Error updating product.
  */
-router.put("/", updateProductById);
+router.put('/', updateProductById);
 
 /**
  * @swagger
- * /products/{product_id}:
+ * /api/products/{product_id}:
  *   delete:
  *     summary: Delete a product by ID
  *     description: Delete a product by its ID.
@@ -149,11 +149,11 @@ router.put("/", updateProductById);
  *       '500':
  *         description: Error deleting product.
  */
-router.delete("/", deleteProductById);
+router.delete('/', deleteProductById);
 
 /**
  * @swagger
- * /products/{product_id}/results:
+ * /api/products/{product_id}/results:
  *   get:
  *     summary: Get a product result by ID
  *     description: Retrieve a product result by its ID.
@@ -175,11 +175,11 @@ router.delete("/", deleteProductById);
  *       '500':
  *         description: Error retrieving results.
  */
-router.get("/results", getProductResultsById);
+router.get('/results', getProductResultsById);
 
 /**
  * @swagger
- * /products/{product_id}/send:
+ * /api/products/{product_id}/send:
  *   get:
  *     summary: Send invitation by product ID
  *     description: Send invitation of a product by its ID.
@@ -201,8 +201,8 @@ router.get("/results", getProductResultsById);
  *       '500':
  *         description: Error sending invitations.
  */
-router.get("/send", sendInvitationsByProductId);
+router.get('/send', sendInvitationsByProductId);
 
-router.use("/invitations", invitationsRoutes);
+router.use('/invitations', invitationsRoutes);
 
 export default router;

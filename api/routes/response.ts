@@ -1,8 +1,8 @@
-import express from "express";
+import express from 'express';
 import {
   getResponseByInvitationToken,
   responseByInvitationToken,
-} from "../controllers/response";
+} from '../controllers/response';
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /response/{invitation_token}:
+ * /api/response/{invitation_token}:
  *   get:
  *     summary: Get questionary
  *     description: Retrieve a questionary
@@ -33,11 +33,11 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving questionary.
  */
-router.get("/", getResponseByInvitationToken);
+router.get('/', getResponseByInvitationToken);
 
 /**
  * @swagger
- * /response/{invitation_token}:
+ * /api/response/{invitation_token}:
  *   post:
  *     summary: Reply questionary
  *     description: Reply questionary.
@@ -66,6 +66,6 @@ router.get("/", getResponseByInvitationToken);
  *       '500':
  *         description: Error replying questionary.
  */
-router.post("/", responseByInvitationToken);
+router.post('/', responseByInvitationToken);
 
 export default router;

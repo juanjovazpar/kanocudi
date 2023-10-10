@@ -1,8 +1,8 @@
-import express from "express";
+import express from 'express';
 import {
   updateInvitationInProduct,
   deleteInvitationFromProduct,
-} from "../controllers/invitation";
+} from '../controllers/invitation';
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /products/{product_id}/invitations/{invitation_id}:
+ * /api/products/{product_id}/invitations/{invitation_id}:
  *   put:
  *     summary: Update an invitation for a product
  *     description: Update the email of an invitation for a product.
@@ -53,11 +53,11 @@ const router = express.Router();
  *       '500':
  *         description: Error updating invitation.
  */
-router.put("/", updateInvitationInProduct);
+router.put('/', updateInvitationInProduct);
 
 /**
  * @swagger
- * /products/{product_id}/invitations/{invitation_id}:
+ * /api/products/{product_id}/invitations/{invitation_id}:
  *   delete:
  *     summary: Delete an invitation from a product
  *     description: Delete an invitation from a product by its ID.
@@ -84,6 +84,6 @@ router.put("/", updateInvitationInProduct);
  *       '500':
  *         description: Error deleting invitation.
  */
-router.delete("/", deleteInvitationFromProduct);
+router.delete('/', deleteInvitationFromProduct);
 
 export default router;
