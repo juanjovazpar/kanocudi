@@ -38,7 +38,7 @@
     "eject": "react-scripts eject",
     "build": "react-scripts build && npm run build:api",
     "build:api": "cd api && npx tsc --outDir ../build",
-    "dev": "concurrently \"mongod\" \"npm run build:api && nodemon -q ./build/api/server.js\" \"npm run build:api -- --watch\" \"npm start\""
+    "dev": "concurrently \"mongod\" \"npm run build:api && nodemon -q ./build/server.js\" \"npm run build:api -- --watch\" \"npm start\""
   },
   "eslintConfig": {
     "extends": [

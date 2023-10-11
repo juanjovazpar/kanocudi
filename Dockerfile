@@ -2,15 +2,14 @@ FROM node:14
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY /api/package*.json ./
 
-RUN npm install mongodb --save
 RUN npm install
 
-COPY . .
+COPY /api .
 
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 80
 
-CMD [ "npm", "start" ]
+CMD ["npm", "start"]
