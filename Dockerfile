@@ -2,14 +2,14 @@ FROM node:14
 
 WORKDIR /app
 
-COPY /api/package*.json ./
+COPY package*.json ./
 
 RUN npm install
 
-COPY /api .
+COPY . .
 
 RUN npm run build
 
-EXPOSE 80
+EXPOSE 8080
 
-CMD ["npm", "start"]
+CMD ["node", "build/server.js"]

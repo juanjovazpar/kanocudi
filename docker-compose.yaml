@@ -5,7 +5,7 @@ services:
     ports:
       - '27017:27017'
 
-  react:
+  server:
     build:
       context: .
       dockerfile: ./Dockerfile
