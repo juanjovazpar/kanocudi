@@ -1,13 +1,13 @@
-import { Request, Response } from "express";
-import { RequestProduct } from "../middlewares/productOwnership";
-import { IProduct, Product } from "../db/schemas/product";
-import { RequestInvitation } from "../middlewares/invitationOwnership";
+import { Request, Response } from 'express';
+import { RequestProduct } from '../middlewares/productOwnership';
+import { IProduct, Product } from '../db/schemas/product';
+import { RequestInvitation } from '../middlewares/invitationOwnership';
 import {
   IQuestionaryResponse,
   QuestionaryResponse,
-} from "../db/schemas/response";
-import { Answer, IAnswer } from "../db/schemas/answer";
-import { IFeature } from "../db/schemas/feature";
+} from '../db/schemas/response';
+import { Answer, IAnswer } from '../db/schemas/answer';
+import { IFeature } from '../db/schemas/feature';
 
 export const getResponseByInvitationToken = async (
   req: Request,
@@ -17,21 +17,21 @@ export const getResponseByInvitationToken = async (
     const product = (req as RequestProduct).product;
 
     if (!product) {
-      res.status(404).json({ message: "Product not found" });
+      res.status(404).json({ message: 'Product not found' });
     } else {
       const questionary = await Product.findById(product._id)
-        .select(["-owner", "-_id", "-invitations", "-status"])
+        .select(['-owner', '-_id', '-invitations', '-status'])
         .populate([
           {
-            path: "features",
-            select: ["-product", "-questionaries"],
+            path: 'features',
+            select: ['-product', '-questionaries'],
           },
         ]);
 
       res.status(200).json(questionary);
     }
   } catch (error) {
-    res.status(500).json({ message: "Error retrieving questionary", error });
+    res.status(500).json({ message: 'Error retrieving questionary', error });
   }
 };
 
@@ -44,17 +44,17 @@ export const responseByInvitationToken = async (
     const answers: IAnswer[] = req.body?.response;
 
     if (!product) {
-      res.status(404).json({ message: "Product not found" });
+      res.status(404).json({ message: 'Product not found' });
       return;
     }
 
     if (!product.features) {
-      res.status(404).json({ message: "Features not found" });
+      res.status(404).json({ message: 'Features not found' });
       return;
     }
 
     if (!invitation) {
-      res.status(404).json({ message: "Invitation not found" });
+      res.status(404).json({ message: 'Invitation not found' });
       return;
     }
 
@@ -115,8 +115,8 @@ export const responseByInvitationToken = async (
     (product as unknown as IProduct).responses.push(newResponse._id);
     await product.save();
 
-    res.status(200).json({ message: "Thank you for replying!" });
+    res.status(200).json({ message: 'Thank you for replying!' });
   } catch (error) {
-    res.status(500).json({ message: "Error sending response", error });
+    res.status(500).json({ message: 'Error sending response', error });
   }
 };

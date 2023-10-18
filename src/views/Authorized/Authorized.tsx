@@ -1,7 +1,11 @@
-import { IFilter } from '@/interfaces/Filter.interface';
 import React from 'react';
-import './Authorized.scss';
+import { Provider, connect } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+
+import { IFilter } from '@/interfaces/Filter.interface';
+import store from '../../store';
+import './Authorized.scss';
+import { signUp } from '../../store/authenticate/actions';
 
 function Authorized() {
   const filters: IFilter<string>[] = [
@@ -18,6 +22,14 @@ function Authorized() {
       value: 'value3',
     },
   ];
+
+  /* const triggerAction = () => {
+    this.props.someAction('data'); // Dispatch action
+  }; 
+  
+  
+  const someData = this.props.someData;
+  */
 
   return (
     <>
@@ -62,7 +74,9 @@ function Authorized() {
             </div>
           </section>
           <section className="row">
-            <Outlet />
+            <Provider store={store}>
+              <Outlet />
+            </Provider>
           </section>
         </main>
       </section>
@@ -70,4 +84,4 @@ function Authorized() {
   );
 }
 
-export default Authorized;
+export default connect(null, { signUp })(Authorized);

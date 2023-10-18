@@ -1,5 +1,10 @@
 import React from 'react';
-import Payment from '../Payment/Payment';
+
+// import { signUp } from '../../services/endpoint.service';
+/* const onClick = async () => {
+    const data = await signUp('test+3@kanocudi.com', 'changeMe123!');
+    console.log(data);
+  }; */
 
 function SignUp() {
   const state = {
@@ -71,7 +76,6 @@ function SignUp() {
           </button>
         </form>
       </div>
-      <Payment />
     </div>
   );
 }

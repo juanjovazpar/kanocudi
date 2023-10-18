@@ -1,14 +1,14 @@
-import { Request, Response } from "express";
-import { IUser, User } from "../db/schemas/user";
-import { sendVerificationMail } from "../mailer/verificationLink";
-import { getHashedToken, getJWToken } from "../utils/tokenGenerator";
-import { isValidEmail } from "../utils/isValidEmail";
+import { Request, Response } from 'express';
+import { IUser, User } from '../db/schemas/user';
+import { sendVerificationMail } from '../mailer/verificationLink';
+import { getHashedToken, getJWToken } from '../utils/tokenGenerator';
+import { isValidEmail } from '../utils/isValidEmail';
 import {
   PASSWORD_RULES,
   comparePasswords,
   hashPassword,
   isValidPassword,
-} from "../utils/passwords";
+} from '../utils/passwords';
 
 export const signup = async (
   req: Request,
@@ -19,12 +19,12 @@ export const signup = async (
     const existingUser: IUser | null = await User.findOne({ email });
 
     if (existingUser) {
-      res.status(400).json({ message: "Email already exists" });
+      res.status(400).json({ message: 'Email already exists' });
       return;
     }
 
     if (!isValidEmail(email)) {
-      res.status(400).json({ message: "Invalid email format" });
+      res.status(400).json({ message: 'Invalid email format' });
       return;
     }
 
@@ -46,10 +46,10 @@ export const signup = async (
     await newUser.save();
     // await sendVerificationMail(email, hashedVerificationToken);
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ message: "Error creating user", error });
+    console.error('Error creating user:', error);
+    res.status(500).json({ message: 'Error creating user', error });
   }
 };
 
@@ -64,7 +64,7 @@ export const signin = async (
     if (!user) {
       res
         .status(401)
-        .json({ message: "Authentication failed. User not found." });
+        .json({ message: 'Authentication failed. User not found.' });
       return;
     }
 
@@ -76,7 +76,7 @@ export const signin = async (
     if (!passwordMatch) {
       res
         .status(401)
-        .json({ message: "Authentication failed. Incorrect password." });
+        .json({ message: 'Authentication failed. Incorrect password.' });
       return;
     }
     const token: string = getJWToken(user._id, user.email);
@@ -86,7 +86,7 @@ export const signin = async (
 
     res.status(200).json({ token, userId: user._id, email: user.email });
   } catch (error) {
-    console.error("Error during login:", error);
-    res.status(500).json({ message: "Error during login", error });
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Error during login', error });
   }
 };
