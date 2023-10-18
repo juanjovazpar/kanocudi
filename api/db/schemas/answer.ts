@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema, Model, CallbackError } from "mongoose";
-import { getFeatureCategory } from "../utils/featureCategory";
+import { getFeatureCategory } from "../../utils/featureCategory";
 import { FeatureCategory } from "./featureCategory";
 
 interface IAnswer extends Document {

@@ -5,7 +5,7 @@ import {
   PERFORMANCE,
   REVERSE,
 } from "../db/createFeatureCategories";
-import { IAnswer } from "../schemas/answer";
+import { IAnswer } from "../db/schemas/answer";
 
 export const getFeatureCategory = (answer: IAnswer): string => {
   const { positive_answer, negative_answer } = answer;

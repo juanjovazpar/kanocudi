@@ -1,7 +1,7 @@
-import express from "express";
-import { getAllProducts, createProduct } from "../controllers/products";
-import { productOwnershipMiddleware } from "../middlewares/productOwnership";
-import productRoutes from "./product";
+import express from 'express';
+import { getAllProducts, createProduct } from '../controllers/products';
+import { productOwnershipMiddleware } from '../middlewares/productOwnership';
+import productRoutes from './product';
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /products:
+ * /api/products:
  *   get:
  *     summary: Get all products
  *     description: Retrieve a list of all products owned by the user.
@@ -28,11 +28,11 @@ const router = express.Router();
  *       '500':
  *         description: Error retrieving products.
  */
-router.get("/", getAllProducts);
+router.get('/', getAllProducts);
 
 /**
  * @swagger
- * /products:
+ * /api/products:
  *   post:
  *     summary: Create a new product
  *     description: Create a new product with a name and description.
@@ -102,8 +102,8 @@ router.get("/", getAllProducts);
  *       '500':
  *         description: Error creating product.
  */
-router.post("/", createProduct);
+router.post('/', createProduct);
 
-router.use("/:product_id", productOwnershipMiddleware, productRoutes);
+router.use('/:product_id', productOwnershipMiddleware, productRoutes);
 
 export default router;

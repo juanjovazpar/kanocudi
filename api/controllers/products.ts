@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { Product } from "../schemas/product";
+import { Product } from "../db/schemas/product";
 import { RequestAuth } from "../middlewares/authToken";
-import { Feature, IFeature } from "../schemas/feature";
-import { IInvitation, Invitation } from "../schemas/invitation";
+import { Feature, IFeature } from "../db/schemas/feature";
+import { IInvitation, Invitation } from "../db/schemas/invitation";
 import { isValidEmail } from "../utils/isValidEmail";
 import { getHashedToken } from "../utils/tokenGenerator";
 

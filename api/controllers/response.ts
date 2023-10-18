@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import { RequestProduct } from "../middlewares/productOwnership";
-import { IProduct, Product } from "../schemas/product";
+import { IProduct, Product } from "../db/schemas/product";
 import { RequestInvitation } from "../middlewares/invitationOwnership";
-import { IQuestionaryResponse, QuestionaryResponse } from "../schemas/response";
-import { Answer, IAnswer } from "../schemas/answer";
-import { IFeature } from "../schemas/feature";
+import {
+  IQuestionaryResponse,
+  QuestionaryResponse,
+} from "../db/schemas/response";
+import { Answer, IAnswer } from "../db/schemas/answer";
+import { IFeature } from "../db/schemas/feature";
 
 export const getResponseByInvitationToken = async (
   req: Request,

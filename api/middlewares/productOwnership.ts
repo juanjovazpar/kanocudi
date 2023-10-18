@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { IProduct, Product } from "../schemas/product";
+import { IProduct, Product } from "../db/schemas/product";
 import { RequestAuth } from "./authToken";
 
 export interface RequestProduct extends RequestAuth {

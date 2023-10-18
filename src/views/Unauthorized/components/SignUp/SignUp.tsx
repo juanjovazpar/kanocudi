@@ -1,18 +1,18 @@
-import React from "react";
-import Payment from "../Payment/Payment";
+import React from 'react';
+import Payment from '../Payment/Payment';
 
 function SignUp() {
   const state = {
-    username: "",
-    email: "",
-    password: "",
+    username: '',
+    email: '',
+    password: '',
   };
 
   const handleChange = (e: any) => {};
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log("Signup Data:", state);
+    console.log('Signup Data:', state);
   };
 
   return (
@@ -29,7 +29,6 @@ function SignUp() {
               className="form-control"
               id="username"
               name="username"
-              value={state.username}
               onChange={handleChange}
               required
             />
@@ -37,11 +36,10 @@ function SignUp() {
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               id="email"
               name="email"
-              value={state.email}
               onChange={handleChange}
               required
             />
@@ -53,7 +51,6 @@ function SignUp() {
               className="form-control"
               id="password"
               name="password"
-              value={state.password}
               onChange={handleChange}
               required
             />
@@ -65,7 +62,6 @@ function SignUp() {
               className="form-control"
               id="password"
               name="password"
-              value={state.password}
               onChange={handleChange}
               required
             />

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { Product } from "../schemas/product";
+import { Product } from "../db/schemas/product";
 import { RequestProduct } from "../middlewares/productOwnership";
 import { sendInvitationMail } from "../mailer/sendInvitation";
-import { IInvitation } from "../schemas/invitation";
+import { IInvitation } from "../db/schemas/invitation";
 import { getHashedToken } from "../utils/tokenGenerator";
 
 export const getProductById = async (

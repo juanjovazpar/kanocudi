@@ -1,14 +1,24 @@
-import { MongoClient } from "mongodb";
+import mongoose from 'mongoose';
+import { createInitialFeatureCategories } from './createFeatureCategories';
+import { createInitialProductStatuses } from './createProductStatuses';
 
-const connectionString = process.env.ATLAS_URI || "";
+const db = {
+  connect: () => {
+    mongoose
+      .connect(process.env.DB_URI!, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      } as mongoose.ConnectOptions)
+      .then(() => {
+        createInitialFeatureCategories();
+        createInitialProductStatuses();
 
-const client = new MongoClient(connectionString);
-
-let db;
-
-client
-  .connect()
-  .then((c) => (db = c.db("sample_training")))
-  .catch((e) => console.log(e));
+        console.log('Connected to MongoDB');
+      })
+      .catch((error) => {
+        console.error('Error connecting to MongoDB:', error);
+      });
+  },
+};
 
 export default db;

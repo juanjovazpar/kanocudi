@@ -1,6 +1,6 @@
 import { Request, NextFunction, Response } from "express";
-import { IInvitation, Invitation } from "../schemas/invitation";
-import { IProduct, Product } from "../schemas/product";
+import { IInvitation, Invitation } from "../db/schemas/invitation";
+import { IProduct, Product } from "../db/schemas/product";
 import { RequestProduct } from "./productOwnership";
 
 export interface RequestInvitation extends Request {

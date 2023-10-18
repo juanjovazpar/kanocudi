@@ -1,9 +1,9 @@
-import express, { Router } from "express";
-import { signup, signin } from "../controllers/auth";
-import { forgot_password, resetPassword } from "../controllers/forgotPassword";
-import { verifyUser } from "../controllers/verification";
-import { getLoggedUser } from "../controllers/loggedUser";
-import { authTokenMiddleware } from "../middlewares/authToken";
+import express, { Router } from 'express';
+import { signup, signin } from '../controllers/auth';
+import { forgot_password, resetPassword } from '../controllers/forgotPassword';
+import { verifyUser } from '../controllers/verification';
+import { getLoggedUser } from '../controllers/loggedUser';
+import { authTokenMiddleware } from '../middlewares/authToken';
 
 const router: Router = express.Router();
 
@@ -16,7 +16,7 @@ const router: Router = express.Router();
 
 /**
  * @swagger
- * /auth/signup:
+ * /api/auth/signup:
  *   post:
  *     summary: User sign-up
  *     description: Register a new user with a username and password.
@@ -48,11 +48,11 @@ const router: Router = express.Router();
  *       '500':
  *         description: Error creating user.
  */
-router.post("/signup", signup);
+router.post('/signup', signup);
 
 /**
  * @swagger
- * /auth/signin:
+ * /api/auth/signin:
  *   post:
  *     summary: Log in a user
  *     tags: [Authentication]
@@ -81,11 +81,11 @@ router.post("/signup", signup);
  *       '401':
  *         description: Authentication failed. User not found | Incorrect password.
  */
-router.post("/signin", signin);
+router.post('/signin', signin);
 
 /**
  * @swagger
- * /auth/forgot_password:
+ * /api/auth/forgot_password:
  *   post:
  *     summary: Forgot password
  *     tags: [Authentication]
@@ -111,11 +111,11 @@ router.post("/signin", signin);
  *       '401':
  *         description: Request failed. User not found | Email not found.
  */
-router.post("/forgot_password", forgot_password);
+router.post('/forgot_password', forgot_password);
 
 /**
  * @swagger
- * /auth/forgot_password/{resetPasswordToken}:
+ * /api/auth/forgot_password/{resetPasswordToken}:
  *   post:
  *     summary: Reset password
  *     tags: [Authentication]
@@ -145,11 +145,11 @@ router.post("/forgot_password", forgot_password);
  *       '400':
  *         description: Invalid password format.
  */
-router.post("/forgot_password/:resetPasswordToken", resetPassword);
+router.post('/forgot_password/:resetPasswordToken', resetPassword);
 
 /**
  * @swagger
- * /auth/verify/{verificationToken}:
+ * /api/auth/verify/{verificationToken}:
  *   get:
  *     summary: Verify user email
  *     tags: [Authentication]
@@ -164,11 +164,11 @@ router.post("/forgot_password/:resetPasswordToken", resetPassword);
  *       '404':
  *         description: Email or token not found.
  */
-router.get("/verify/:verificationToken", verifyUser); // TODO: Add authentication middleware to ensure only logged users can verify himself
+router.get('/verify/:verificationToken', verifyUser); // TODO: Add authentication middleware to ensure only logged users can verify himself
 
 /**
  * @swagger
- * /auth/me:
+ * /api/auth/me:
  *   get:
  *     summary: Get logged user information
  *     tags: [Authentication]
@@ -180,6 +180,6 @@ router.get("/verify/:verificationToken", verifyUser); // TODO: Add authenticatio
  *       '401':
  *         description: Authentication failed. User not found | Incorrect password.
  */
-router.get("/me", authTokenMiddleware, getLoggedUser);
+router.get('/me', authTokenMiddleware, getLoggedUser);
 
 export default router;
