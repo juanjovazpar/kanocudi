@@ -1,12 +1,15 @@
-import React from "react";
-import { IProduct } from "@/interfaces/Product.interface";
-import { PRODUCTS } from "../../../../mocks/Product.mock";
+import React from 'react';
+
+import { IProduct } from '@/interfaces/Product.interface';
+import { PRODUCTS } from '../../../../mocks/Product.mock';
+import Matrix from '../Matrix/Matrix';
 
 function Results() {
   const product: IProduct = PRODUCTS[4];
 
   return (
     <section className="container">
+      <Matrix />
       <div className="row">
         <div className="col-4">
           <h3 className="text-center">MUST HAVE</h3>

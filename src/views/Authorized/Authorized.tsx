@@ -1,21 +1,21 @@
-import { IFilter } from "@/interfaces/Filter.interface";
-import React from "react";
-import "./Authorized.scss";
-import { Outlet } from "react-router-dom";
+import { IFilter } from '@/interfaces/Filter.interface';
+import React from 'react';
+import './Authorized.scss';
+import { Outlet } from 'react-router-dom';
 
 function Authorized() {
   const filters: IFilter<string>[] = [
     {
-      name: "name1",
-      value: "value1",
+      name: 'name1',
+      value: 'value1',
     },
     {
-      name: "name2",
-      value: "value2",
+      name: 'name2',
+      value: 'value2',
     },
     {
-      name: "name3",
-      value: "value3",
+      name: 'name3',
+      value: 'value3',
     },
   ];
 

@@ -1,7 +1,7 @@
-import express from "express";
-import { createInvitationInProduct } from "../controllers/invitations";
-import { invitationOwnershipMiddleware } from "../middlewares/invitationOwnership";
-import invitationRoutes from "./invitation";
+import express from 'express';
+import { createInvitationInProduct } from '../controllers/invitations';
+import { invitationOwnershipMiddleware } from '../middlewares/invitationOwnership';
+import invitationRoutes from './invitation';
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /products/{product_id}/invitations:
+ * /api/products/{product_id}/invitations:
  *   post:
  *     summary: Create an invitation for a product
  *     description: Create an invitation for a product with a specified email.
@@ -47,8 +47,8 @@ const router = express.Router();
  *       '500':
  *         description: Error creating invitation.
  */
-router.post("/", createInvitationInProduct);
+router.post('/', createInvitationInProduct);
 
-router.use("/:invitation_id", invitationOwnershipMiddleware, invitationRoutes);
+router.use('/:invitation_id', invitationOwnershipMiddleware, invitationRoutes);
 
 export default router;

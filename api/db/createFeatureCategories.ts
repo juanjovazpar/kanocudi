@@ -1,4 +1,4 @@
-import { FeatureCategory } from "../schemas/featureCategory";
+import { FeatureCategory } from "./schemas/featureCategory";
 
 export const MUST_BE = "must-be";
 export const PERFORMANCE = "performance";

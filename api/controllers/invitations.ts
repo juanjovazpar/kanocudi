@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { isValidEmail } from "../utils/isValidEmail";
-import { IInvitation, Invitation } from "../schemas/invitation";
+import { IInvitation, Invitation } from "../db/schemas/invitation";
 import { RequestProduct } from "../middlewares/productOwnership";
 import { getHashedToken } from "../utils/tokenGenerator";
 

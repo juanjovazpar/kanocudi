@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { RequestAuth } from "../middlewares/authToken";
-import { FeatureCategory } from "../schemas/featureCategory";
-import { ProductStatus } from "../schemas/productStatus";
+import { FeatureCategory } from "../db/schemas/featureCategory";
+import { ProductStatus } from "../db/schemas/productStatus";
 
 export const getLoggedUser = async (
   req: Request,
@@ -12,14 +12,12 @@ export const getLoggedUser = async (
     const statuses = await ProductStatus.find();
     const categories = await FeatureCategory.find();
 
-    res
-      .status(200)
-      .json({
-        email,
-        name,
-        isVerified,
-        initialConfig: { statuses, categories },
-      });
+    res.status(200).json({
+      email,
+      name,
+      isVerified,
+      initialConfig: { statuses, categories },
+    });
   } catch (error) {
     res.status(500).json({
       message: "User not found",

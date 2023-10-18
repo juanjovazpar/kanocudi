@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { IUser, User } from "../schemas/user";
+import { IUser, User } from "../db/schemas/user";
 
 export interface RequestAuth extends Request {
   user: IUser;
